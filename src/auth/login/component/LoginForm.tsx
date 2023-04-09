@@ -71,7 +71,7 @@ export default function LoginForm() {
       >
         <RHFCheckbox name="remember" label="Remember me" />
         <Typography sx={{ fontSize: '13px' }}>
-          <Link to={PATH_AUTH.forgotPassword}>Forgot Password</Link>
+          {/* <Link to={PATH_AUTH.forgotPassword}>Forgot Password</Link> */}
         </Typography>
       </Stack>
 

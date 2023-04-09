@@ -29,8 +29,8 @@ export default function Logo({ disabledLink = false, sx }: Props) {
   // );
 
   const logo = (
-    <Box sx={{ width: 100, height: 40, ...sx }}>
-      <img src="/logoVita.png" />
+    <Box sx={{ width: 40, height: 40, ...sx }}>
+      <img src="/logo192.png" />
     </Box>
   );
 
