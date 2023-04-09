@@ -27,7 +27,7 @@ const ICONS = {
   menuItem: getIcon('ic_menu_item'),
   setting: getIcon('ic_menu_item'),
   policy: getIcon('ic_policy'),
-  document: getIcon('ic_policy'),
+  document: getIcon('ic_policy')
 };
 
 const navConfig = [
@@ -46,7 +46,7 @@ const navConfig = [
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
-    subheader: 'VITADAIRY QR SBPS',
+    subheader: 'Phan Dung',
     items: [
       // request
       // {
@@ -60,24 +60,6 @@ const navConfig = [
       //     },
       //   ],
       // },
-
-      {
-        title: 'Quản lý Request',
-        path: PATH_DASHBOARD.requestManage.root,
-        icon: ICONS.booking,
-        children: [
-          {   
-            title: 'Danh sách request',
-            path: PATH_DASHBOARD.requestManage.list
-          },
-          {
-            title: 'Tạo mới File QR',
-            path: PATH_DASHBOARD.requestManage.new,
-          },
-        ],
-      },
-
-
       // account
       // {
       //   title: 'Quản lý tài khoản',
@@ -90,25 +72,8 @@ const navConfig = [
       //     },
       //   ],
       // },
-      {
-        title: 'Quản lý quản trị viên',
-        path: PATH_DASHBOARD.admin.root,
-        icon: ICONS.policy,
-        children: [{ title: 'Danh sách quản trị viên', path: PATH_DASHBOARD.admin.list }],
-      },
-      {
-        title: 'Quản lý mã QR SBPS',
-        path: PATH_DASHBOARD.spoonCode.root,
-        icon: ICONS.invoice,
-        children: [
-          {   
-            title: 'Danh sách mã QR',
-            path: PATH_DASHBOARD.spoonCode.listQR
-          },
-        ],
-      },
-    ],
-  },
+    ]
+  }
 ];
 
 export default navConfig;

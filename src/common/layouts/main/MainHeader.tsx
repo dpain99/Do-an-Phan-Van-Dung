@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 // @mui
+import { AppBar, Box, Button, Container, Stack, Toolbar } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Button, AppBar, Toolbar, Container, Link } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useResponsive from '../../hooks/useResponsive';
@@ -11,11 +11,10 @@ import cssStyles from '../../utils/cssStyles';
 import { HEADER } from '../../../config';
 // components
 import Logo from '../../components/Logo';
-import Label from '../../components/Label';
 //
+import navConfig from './MenuConfig';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
-import navConfig from './MenuConfig';
 
 // ----------------------------------------------------------------------
 
@@ -23,11 +22,11 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   height: HEADER.MOBILE_HEIGHT,
   transition: theme.transitions.create(['height', 'background-color'], {
     easing: theme.transitions.easing.easeInOut,
-    duration: theme.transitions.duration.shorter,
+    duration: theme.transitions.duration.shorter
   }),
   [theme.breakpoints.up('md')]: {
-    height: HEADER.MAIN_DESKTOP_HEIGHT,
-  },
+    height: HEADER.MAIN_DESKTOP_HEIGHT
+  }
 }));
 
 const ToolbarShadowStyle = styled('div')(({ theme }) => ({
@@ -40,7 +39,7 @@ const ToolbarShadowStyle = styled('div')(({ theme }) => ({
   borderRadius: '50%',
   position: 'absolute',
   width: `calc(100% - 48px)`,
-  boxShadow: theme.customShadows.z8,
+  boxShadow: theme.customShadows.z8
 }));
 
 // ----------------------------------------------------------------------
@@ -63,48 +62,33 @@ export default function MainHeader() {
         sx={{
           ...(isOffset && {
             ...cssStyles(theme).bgBlur(),
-            height: { md: HEADER.MAIN_DESKTOP_HEIGHT - 16 },
-          }),
+            height: { md: HEADER.MAIN_DESKTOP_HEIGHT - 16 }
+          })
         }}
       >
         <Container
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Logo />
 
-          <Link
-            href="https://docs-minimals.vercel.app/changelog"
-            target="_blank"
-            rel="noopener"
-            underline="none"
-          >
-            <Label color="info" sx={{ ml: 1 }}>
-              v3.5.0
-            </Label>
-          </Link>
-
           <Box sx={{ flexGrow: 1 }} />
 
           {isDesktop && (
-            <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
+            <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={[]} />
           )}
 
-          <Button
-            variant="contained"
-            target="_blank"
-            rel="noopener"
-            href="https://material-ui.com/store/items/minimal-dashboard/"
-          >
-            Purchase Now
-          </Button>
+          <Stack spacing={3} direction="row">
+            <Button variant="contained">Đăng ký</Button>
+            <Button variant="outlined">Đăng nhập</Button>
+          </Stack>
 
-          {!isDesktop && (
+          {/* {!isDesktop && (
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          )}
+          )} */}
         </Container>
       </ToolbarStyle>
 

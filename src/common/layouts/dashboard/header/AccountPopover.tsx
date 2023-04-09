@@ -25,16 +25,16 @@ import { emailSelector } from 'src/auth/login/login.slice';
 const MENU_OPTIONS = [
   {
     label: 'Home',
-    linkTo: '/',
+    linkTo: '/'
   },
   {
-    label: 'Profile',
-    linkTo: PATH_DASHBOARD.general.app,
+    label: 'Profile'
+    // linkTo: PATH_DASHBOARD.general.app,
   },
   {
-    label: 'Settings',
-    linkTo: PATH_DASHBOARD.general.app,
-  },
+    label: 'Settings'
+    // linkTo: PATH_DASHBOARD.general.app,
+  }
 ];
 
 // ----------------------------------------------------------------------
@@ -82,9 +82,9 @@ export default function AccountPopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
+              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8)
+            }
+          })
         }}
       >
         <MyAvatar />
@@ -100,8 +100,8 @@ export default function AccountPopover() {
           ml: 0.75,
           '& .MuiMenuItem-root': {
             typography: 'body2',
-            borderRadius: 0.75,
-          },
+            borderRadius: 0.75
+          }
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
@@ -115,7 +115,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Stack sx={{ p: 1 }}>
+        {/* <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
             <MenuItem
               key={option.label}
@@ -126,7 +126,7 @@ export default function AccountPopover() {
               {option.label}
             </MenuItem>
           ))}
-        </Stack>
+        </Stack> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
