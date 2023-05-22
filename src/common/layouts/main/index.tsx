@@ -22,7 +22,7 @@ export default function MainLayout() {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      {!isHome ? (
+      {/* {!isHome ? (
         <MainFooter />
       ) : (
         <Box
@@ -30,20 +30,20 @@ export default function MainLayout() {
             py: 5,
             textAlign: 'center',
             position: 'relative',
-            bgcolor: 'background.default',
+            bgcolor: 'background.default'
           }}
-        >
-          <Container>
-            <Logo sx={{ mb: 1, mx: 'auto' }} />
+        > */}
+      {/* <Container> */}
+      {/* <Logo sx={{ mb: 1, mx: 'auto' }} /> */}
 
-            <Typography variant="caption" component="p">
+      {/* <Typography variant="caption" component="p">
               © All rights reserved
               <br /> made by &nbsp;
               <Link href="https://minimals.cc/">minimals.cc</Link>
-            </Typography>
-          </Container>
-        </Box>
-      )}
+            </Typography> */}
+      {/* </Container> */}
+      {/* </Box>
+      )} */}
     </Stack>
   );
 }

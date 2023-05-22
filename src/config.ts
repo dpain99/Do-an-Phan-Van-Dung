@@ -8,13 +8,7 @@ import { PATH_DASHBOARD } from './common/routes/paths';
 // API
 // ----------------------------------------------------------------------
 // This for call http API from https client. You can check here: https://stackoverflow.com/questions/60938091/make-api-request-to-http-endpoint-from-aws-amplify-deployed-https-ssl-client
-export const HOST_API =
-  // process.env.REACT_APP_BASE_URL || 'https://api-stg.vitadairyvietnam.vn/api';
-  process.env.REACT_APP_BASE_URL;
-
-export const HOST_API_AUTH =
-  // process.env.REACT_APP_BASE_URL || 'https://api-stg.vitadairyvietnam.vn/api';
-  process.env.REACT_APP_BASE_URL_AUTH;
+export const HOST_API = process.env.REACT_APP_BASE_URL;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 // export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
@@ -31,7 +25,7 @@ export const HEADER = {
 
 export const NAVBAR = {
   BASE_WIDTH: 260,
-  DASHBOARD_WIDTH: 280,
+  DASHBOARD_WIDTH: 300,
   DASHBOARD_COLLAPSE_WIDTH: 88,
   //
   DASHBOARD_ITEM_ROOT_HEIGHT: 48,

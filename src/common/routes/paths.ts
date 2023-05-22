@@ -6,6 +6,7 @@ function path(root: string, sublink: string) {
 
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/dashboard';
+const Landing_Page = '/';
 
 // ----------------------------------------------------------------------
 
@@ -36,12 +37,29 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
+  lading_page: Landing_Page,
   general: {
     map: path(ROOTS_DASHBOARD, '/map')
   },
   map: {
     root: path('/', '/map'),
     all: path(ROOTS_DASHBOARD, '/map/all')
+  },
+  feature_location: {
+    root: path(ROOTS_DASHBOARD, '/feature-location'),
+    map: path(ROOTS_DASHBOARD, '/feature-location/map')
+  },
+  my_itinerary: {
+    root: path(ROOTS_DASHBOARD, '/my-itinerary')
+  },
+  history_culture: {
+    root: path(ROOTS_DASHBOARD, '/history-culture')
+  },
+  food_locations: {
+    root: path(ROOTS_DASHBOARD, '/food-locations')
+  },
+  night_travels: {
+    root: path(ROOTS_DASHBOARD, '/night-travels')
   }
 };
 

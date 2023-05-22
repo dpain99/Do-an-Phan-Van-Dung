@@ -10,7 +10,7 @@ import {
   Alert,
   Tooltip,
   Container,
-  Typography,
+  Typography
 } from '@mui/material';
 import useAuth from 'src/common/hooks/useAuth';
 import Page from 'src/common/components/Page';
@@ -21,8 +21,8 @@ import useResponsive from 'src/common/hooks/useResponsive';
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }));
 
 const SectionStyle = styled(Card)(({ theme }) => ({
@@ -31,7 +31,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2),
+  margin: theme.spacing(2, 0, 2, 2)
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -41,7 +41,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(12, 0),
+  padding: theme.spacing(12, 0)
 }));
 
 export default function Login() {
@@ -52,7 +52,7 @@ export default function Login() {
   const mdUp = useResponsive('up', 'md');
 
   return (
-    <Page title="Login">
+    <Page title="Đăng nhập">
       <RootStyle>
         {mdUp && (
           <SectionStyle>
@@ -73,7 +73,7 @@ export default function Login() {
             <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography variant="h4" gutterBottom>
-                  Sign in to Minimal
+                  Sign in to Project
                 </Typography>
               </Box>
 
