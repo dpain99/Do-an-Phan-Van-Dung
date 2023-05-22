@@ -6,6 +6,7 @@ import useAuth from '../hooks/useAuth';
 import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
+import NavbarLeftSide from '../layouts/navbar-leftside/index';
 // guards
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
@@ -14,6 +15,7 @@ import AuthGuard from '../guards/AuthGuard';
 // import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import ResetPassword from 'src/auth/reset-password/ResetPassword';
 
 // ----------------------------------------------------------------------
 
@@ -35,45 +37,51 @@ const Loadable = (Component: ElementType) => (props: any) => {
 
 export default function Router() {
   return useRoutes([
-    // {
-    //   path: 'auth',
-    //   children: [
-    //     {
-    //       path: 'login',
-    //       element: (
-    //         <GuestGuard>
-    //           <Login />
-    //         </GuestGuard>
-    //       ),
-    //     },
-    //     {
-    //       path: 'register',
-    //       element: (
-    //         <GuestGuard>
-    //           <Register />
-    //         </GuestGuard>
-    //       ),
-    //     },
-    //     { path: 'login-unprotected', element: <Login /> },
-    //     { path: 'register-unprotected', element: <Register /> },
-    //     { path: 'reset-password', element: <ResetPassword /> },
-    //     { path: 'new-password', element: <NewPassword /> },
-    //     { path: 'verify', element: <VerifyCode /> },
-    //   ],
-    // },
+    {
+      path: 'auth',
+      children: [
+        {
+          path: 'login',
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          )
+        },
+        // {
+        //   path: 'register',
+        //   element: (
+        //     <GuestGuard>
+        //       <Register />
+        //     </GuestGuard>
+        //   )
+        // },
+        { path: 'login-unprotected', element: <Login /> }
+        // { path: 'register-unprotected', element: <Register /> },
+        // { path: 'reset-password', element: <ResetPassword /> },
+        // { path: 'new-password', element: <NewPassword /> },
+        // { path: 'verify', element: <VerifyCode /> }
+      ]
+    },
 
     // Dashboard Routes
     {
       path: 'dashboard',
-      // element: (
-      //   // <AuthGuard>
-      //   //   <DashboardLayout />
-      //   // </AuthGuard>
-      //   <DashboardLayout />
-      // ),
+      element: (
+        // <AuthGuard>
+        //   <DashboardLayout />
+        // </AuthGuard>
+        <DashboardLayout />
+        // <NavbarLeftSide />
+      ),
       children: [
         // { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: 'map', element: <MainMap /> }
+        { path: 'map', element: <MainMap /> },
+        { path: 'feature-location', element: <FeatureLocation /> },
+        { path: 'my-itinerary', element: <MyItinerary /> },
+        { path: 'history-culture', element: <HistoryCulture /> },
+        { path: 'food-locations', element: <FoodLocations /> },
+        { path: 'night-travels', element: <NightTravels /> }
         // { path: 'ecommerce', element: <GeneralEcommerce /> },
         // { path: 'analytics', element: <GeneralAnalytics /> },
         // { path: 'banking', element: <GeneralBanking /> },
@@ -134,8 +142,26 @@ export default function Router() {
 // DASHBOARD
 
 const LandingPage = Loadable(lazy(() => import('../../landing-page/index')));
+
+// Map
 const MainMap = Loadable(lazy(() => import('../../map/index')));
+
+// Feature-location
+const FeatureLocation = Loadable(lazy(() => import('../../feature-locations/index')));
+
+// History-culture
+const HistoryCulture = Loadable(lazy(() => import('../../history-culture/index')));
+
+// My-Itinerary
+const MyItinerary = Loadable(lazy(() => import('../../my-itinerary/index')));
+
+// Food-Locations
+const FoodLocations = Loadable(lazy(() => import('../../food-locations/index')));
+// Night-Travels
+const NightTravels = Loadable(lazy(() => import('../../night-travels/index')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 const Page404 = Loadable(lazy(() => import('../pages/Page404')));
+
+const Login = Loadable(lazy(() => import('../../auth/login/Login')));

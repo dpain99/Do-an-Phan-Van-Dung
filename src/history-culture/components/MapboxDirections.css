@@ -1,0 +1,30 @@
+.mapbox-directions-origin,
+.mapbox-directions-destination {
+  display: none;
+}
+.mapbox-directions-profiles-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .mapbox-directions-profiles-container .mapbox-directions-profile {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 20px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .mapbox-directions-profiles-container .mapbox-directions-profile.active {
+    background-color: #2196f3;
+    color: white;
+  }
+  
+  .mapbox-directions-profiles-container .mapbox-directions-profile:not(.active):hover {
+    background-color: #d3d3d3;
+  }
+  
+  

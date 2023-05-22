@@ -2,11 +2,22 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"],
-      "@component": ["src/common/components/*"]
+      "*": [
+        "*",
+        "@types/*"
+      ],
+      "src/*": [
+        "./src/*"
+      ],
+      "@component": [
+        "src/common/components/*"
+      ]
     },
     "target": "es5",
-    "lib": ["es6", "dom"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "strict": true,
     "noEmit": true,
     "allowJs": true,
@@ -25,6 +36,11 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

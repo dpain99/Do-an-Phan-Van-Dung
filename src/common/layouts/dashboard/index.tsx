@@ -13,6 +13,7 @@ import { HEADER, NAVBAR } from '../../../config';
 import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
+import TemporaryDrawer from '../navbar-leftside';
 
 // ----------------------------------------------------------------------
 
@@ -21,24 +22,18 @@ type MainStyleProps = {
 };
 
 const MainStyle = styled('main', {
-  shouldForwardProp: (prop) => prop !== 'collapseClick',
+  shouldForwardProp: (prop) => prop !== 'collapseClick'
 })<MainStyleProps>(({ collapseClick, theme }) => ({
   flexGrow: 1,
-  paddingTop: HEADER.MOBILE_HEIGHT + 24,
-  paddingBottom: HEADER.MOBILE_HEIGHT + 24,
   [theme.breakpoints.up('lg')]: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: HEADER.DASHBOARD_DESKTOP_HEIGHT + 24,
-    paddingBottom: HEADER.DASHBOARD_DESKTOP_HEIGHT + 24,
     width: `calc(100% - ${NAVBAR.DASHBOARD_WIDTH}px)`,
     transition: theme.transitions.create('margin-left', {
-      duration: theme.transitions.duration.shorter,
+      duration: theme.transitions.duration.shorter
     }),
     ...(collapseClick && {
-      marginLeft: NAVBAR.DASHBOARD_COLLAPSE_WIDTH,
-    }),
-  },
+      marginLeft: NAVBAR.DASHBOARD_COLLAPSE_WIDTH
+    })
+  }
 }));
 
 // ----------------------------------------------------------------------
@@ -57,10 +52,10 @@ export default function DashboardLayout() {
   if (verticalLayout) {
     return (
       <>
-        <DashboardHeader
+        {/* <DashboardHeader
           onOpenSidebar={() => setOpen(true)}
           verticalLayout={verticalLayout}
-        />
+        /> */}
 
         {isDesktop ? (
           <NavbarHorizontal />
@@ -74,12 +69,12 @@ export default function DashboardLayout() {
             px: { lg: 2 },
             pt: {
               xs: `${HEADER.MOBILE_HEIGHT + 24}px`,
-              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 80}px`,
+              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 80}px`
             },
             pb: {
               xs: `${HEADER.MOBILE_HEIGHT + 24}px`,
-              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 24}px`,
-            },
+              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 24}px`
+            }
           }}
         >
           <Outlet />
@@ -87,17 +82,17 @@ export default function DashboardLayout() {
       </>
     );
   }
-
   return (
     <Box
       sx={{
         display: { lg: 'flex' },
-        minHeight: { lg: 1 },
+        minHeight: { lg: 1 }
       }}
     >
-      <DashboardHeader isCollapse={isCollapse} onOpenSidebar={() => setOpen(true)} />
+      {/* <DashboardHeader isCollapse={isCollapse} onOpenSidebar={() => setOpen(true)} /> */}
 
-      <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      {/* <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} /> */}
+      <TemporaryDrawer />
 
       <MainStyle collapseClick={collapseClick}>
         <Outlet />

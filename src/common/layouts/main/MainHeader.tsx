@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
 import { AppBar, Box, Button, Container, Stack, Toolbar } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
@@ -15,6 +15,7 @@ import Logo from '../../components/Logo';
 import navConfig from './MenuConfig';
 import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
+import { PATH_AUTH } from 'src/common/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -55,6 +56,8 @@ export default function MainHeader() {
 
   const isHome = pathname === '/';
 
+  const navigation = useNavigate();
+
   return (
     <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
       <ToolbarStyle
@@ -81,10 +84,10 @@ export default function MainHeader() {
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={[]} />
           )}
 
-          <Stack spacing={3} direction="row">
+          {/* <Stack spacing={3} direction="row">
             <Button variant="contained">Đăng ký</Button>
-            <Button variant="outlined">Đăng nhập</Button>
-          </Stack>
+            <Button variant="outlined" onClick={() => {navigation(PATH_AUTH.login)}}>Đăng nhập</Button>
+          </Stack> */}
 
           {/* {!isDesktop && (
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />

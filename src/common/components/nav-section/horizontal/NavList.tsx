@@ -83,7 +83,7 @@ export default function NavList({ data, depth, hasChildren }: NavListRootProps) 
           }
           PaperProps={{
             onMouseEnter: handleOpen,
-            onMouseLeave: handleClose,
+            onMouseLeave: handleClose
           }}
         >
           <NavSubList data={data.children} depth={depth} />
