@@ -1,17 +1,12 @@
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import mapboxgl, { LngLat, Map } from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import useDeepEffect from 'src/common/hooks/useDeepEffect';
 import ActionButton from './components/ActionButton';
 import Travel from './components/actions/Travel';
-import { useSelector } from 'react-redux';
-import { selectLocations } from './slice';
 import { ListTravelData } from './data/ListTravelData';
-import { current } from '@reduxjs/toolkit';
-import { map } from 'lodash';
-import { dispatch } from 'src/common/redux/store';
-import { setRoute } from 'src/feature-locations/slice';
-import useDeepEffect from 'src/common/hooks/useDeepEffect';
+import { selectLocations } from './slice';
 
 export default function index() {
   const [map, setMap] = useState<Map | null>(null);
@@ -27,6 +22,10 @@ export default function index() {
     .flat();
 
   console.log('listCoordinate', listCoordinate);
+
+  const handleClickRemove = () => {
+    console.log('click click');
+  };
 
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -82,65 +81,65 @@ export default function index() {
 
   const { useDeepCompareEffect } = useDeepEffect();
 
-  useDeepCompareEffect(() => {
-    if (map !== null) {
-      const marker = new mapboxgl.Marker().setLngLat([current[0], current[1]]).addTo(map);
-      const directions = new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
-        unit: 'metric',
-        profile: 'mapbox/driving',
-        alternatives: false,
-        geometries: 'geojson',
-        controls: { instructions: false },
-        flyTo: false,
-        language: 'vi',
-        step: true
-      });
+  // useDeepCompareEffect(() => {
+  //   if (map !== null) {
+  //     const marker = new mapboxgl.Marker().setLngLat([current[0], current[1]]).addTo(map);
+  //     const directions = new MapboxDirections({
+  //       accessToken: mapboxgl.accessToken,
+  //       unit: 'metric',
+  //       profile: 'mapbox/driving',
+  //       alternatives: false,
+  //       geometries: 'geojson',
+  //       controls: { instructions: false },
+  //       flyTo: false,
+  //       language: 'vi',
+  //       step: true
+  //     });
 
-      listCoordinate.map((item, index) => {
-        const markerEl = document.createElement('div');
-        markerEl.className = 'marker';
-        markerEl.innerText = String(index + 1);
-        markerEl.style.cssText = `
-              background-color: red;
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              display: flex;
-              justify-content: center;
-              border: 1px solid black;
-              color: white;
-              `;
+  //     listCoordinate.map((item, index) => {
+  //       const markerEl = document.createElement('div');
+  //       markerEl.className = 'marker';
+  //       markerEl.innerText = String(index + 1);
+  //       markerEl.style.cssText = `
+  //             background-color: red;
+  //             width: 20px;
+  //             height: 20px;
+  //             border-radius: 50%;
+  //             display: flex;
+  //             justify-content: center;
+  //             border: 1px solid black;
+  //             color: white;
+  //             `;
 
-        const coordinateMaker = new mapboxgl.Marker({
-          element: markerEl
-        })
-          .setLngLat([item.coordinate[0], item.coordinate[1]])
-          .addTo(map);
-        if (index !== 0 && index !== listCoordinate.length - 1) {
-          console.log('index', index);
-          directions.addWaypoint(index, [item.coordinate[0], item.coordinate[1]]);
-        } else null;
+  //       const coordinateMaker = new mapboxgl.Marker({
+  //         element: markerEl
+  //       })
+  //         .setLngLat([item.coordinate[0], item.coordinate[1]])
+  //         .addTo(map);
+  //       if (index !== 0 && index !== listCoordinate.length - 1) {
+  //         console.log('index', index);
+  //         directions.addWaypoint(index, [item.coordinate[0], item.coordinate[1]]);
+  //       } else null;
 
-        map.addControl(directions, 'top-left');
+  //       map.addControl(directions, 'top-left');
 
-        map.on('load', () => {
-          setMap(map);
-          directions.setOrigin([
-            listCoordinate[0].coordinate[0],
-            listCoordinate[0].coordinate[1]
-          ]);
-          directions.setDestination([
-            listCoordinate[listCoordinate.length - 1].coordinate[0],
-            listCoordinate[listCoordinate.length - 1].coordinate[1]
-          ]);
-        });
-        directions.on('route', (event: any) => {
-          const route = event.route[0];
-        });
-      });
-    }
-  }, [selectedLocation]);
+  //       map.on('load', () => {
+  //         setMap(map);
+  //         directions.setOrigin([
+  //           listCoordinate[0].coordinate[0],
+  //           listCoordinate[0].coordinate[1]
+  //         ]);
+  //         directions.setDestination([
+  //           listCoordinate[listCoordinate.length - 1].coordinate[0],
+  //           listCoordinate[listCoordinate.length - 1].coordinate[1]
+  //         ]);
+  //       });
+  //       directions.on('route', (event: any) => {
+  //         const route = event.route[0];
+  //       });
+  //     });
+  //   }
+  // }, [selectedLocation]);
 
   return (
     <>

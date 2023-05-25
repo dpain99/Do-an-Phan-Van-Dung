@@ -1,53 +1,70 @@
-import { keyframes } from '@emotion/react';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { Box, Button, Slide, Stack } from '@mui/material';
 import mapboxgl, { Map } from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import Iconify from 'src/common/components/Iconify';
+import { dispatch } from 'src/common/redux/store';
 import MenuDistrict from './components/MenuDistrict';
-import DetailLocation from './components/detailLocation/DetailLocation';
 import ListLocationDistrict from './components/detailLocation/ListLocationDistrict';
+import DirectionBox from './components/directions/DirectionBox';
 import SearchBox from './components/search/SearchBox';
+import './css/text-marker.css';
 import districts from './data';
 import locationsOnDistricts from './data/locations';
-import { districtValue, searchResult, selectedDistrict } from './slice';
-import Iconify from 'src/common/components/Iconify';
+import { MyFeature } from './interface';
+import {
+  currentPoint,
+  deleteDirection,
+  districtValue,
+  oneMarker,
+  route,
+  searchResult,
+  selectedDistrict,
+  setClickShowMarker,
+  setCurrentPoint,
+  setOneMarker,
+  setRoute,
+  setSearchResult,
+  setSelectedDistrict,
+  setShowDirectionBox,
+  setValueDistrict,
+  showDirectionBox
+} from './slice';
+import { map } from 'lodash';
 
 export default function index() {
   const [map, setMap] = useState<Map | null>(null);
-  const [current, setCurrent] = useState<number[]>([0, 0]);
+  // const [current, setCurrent] = useState<number[]>([0, 0]);
   const [hasDistrict, setHasDistrict] = useState<number[]>([]);
+  const current = useSelector(currentPoint);
   const idDistrict = useSelector(districtValue);
   const idSelected = useSelector(selectedDistrict);
   const locationResultSearch = useSelector(searchResult);
+  const showOneMarker = useSelector(oneMarker);
+  const dataRoute = useSelector(route);
+  const showDirection = useSelector(showDirectionBox);
+  const delDirection = useSelector(deleteDirection);
 
   const [showStack, setShowStack] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
   const [showLocationDistrict, setShowLocationDistrict] = useState(false);
-  const [buttonBottom, setButtonBottom] = useState(160);
-
-  const slideIn = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-`;
-
-  const slideOut = keyframes`
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-`;
 
   const handleButtonClick = () => {
     setShowStack(!showStack);
-    setButtonBottom(showStack ? 0 : 160);
   };
+
+  const handleDetailLocation = () => {
+    setShowLocationDistrict(!showLocationDistrict);
+  };
+
+  const handleDirection = () => {
+    dispatch(setShowDirectionBox(!showDirection));
+  };
+
+  useEffect(() => {
+    if (idSelected.length === 0) {
+      setShowLocationDistrict(false);
+    } else setShowLocationDistrict(true);
+  }, [idSelected]);
 
   // lay vi tri hien tai
   useEffect(() => {
@@ -56,7 +73,7 @@ export default function index() {
         (position) => {
           const longitude = position.coords.longitude;
           const latitude = position.coords.latitude;
-          setCurrent([longitude, latitude]);
+          dispatch(setCurrentPoint([longitude, latitude]));
         },
         (error) => {
           console.error(error);
@@ -84,22 +101,6 @@ export default function index() {
         center: [current[0], current[1]],
         zoom: 12
       });
-
-      const marker = new mapboxgl.Marker().setLngLat([current[0], current[1]]).addTo(map);
-
-      const directions = new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
-        unit: 'metric',
-        profile: 'mapbox/driving',
-        alternatives: false,
-        geometries: 'geojson',
-        controls: { instructions: false },
-        flyTo: false,
-        language: 'vi',
-        step: true
-      });
-
-      // map.addControl(directions, 'top-left');
 
       map.on('load', () => {
         setMap(map);
@@ -139,46 +140,14 @@ export default function index() {
       } else
         map?.addLayer({
           id: data.layer,
-          type: 'fill',
+          type: 'line',
           source: data.src,
           paint: {
-            'fill-color': data.color,
-            'fill-opacity': 0.5
+            'line-color': data.color,
+            'line-width': 2
+            // 'fill-opacity': 0.4
           }
         });
-
-      // su kien click vao layer
-      map?.on('click', data.layer, function (e) {
-        map.setCenter(e.lngLat);
-        map.setZoom(13);
-        locationsOnDistricts.map((value) => {
-          map.addLayer({
-            id: value.layer,
-            type: 'circle',
-            source: value.src,
-            paint: {
-              'circle-radius': 10,
-              'circle-color': 'white'
-            }
-          });
-          map.addLayer({
-            id: `${value.layer}-name`,
-            type: 'symbol',
-            source: value.src,
-            layout: {
-              'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
-              'text-size': 12,
-              'text-offset': [0, 2]
-            },
-            paint: {
-              'text-color': 'white'
-            }
-          });
-        });
-      });
-      // map?.on('mouseenter', data.layer, function () {
-      //   <Typography>Hello</Typography>;
-      // });
     });
 
     const unPickedDistrict = districts.filter((value) => {
@@ -190,15 +159,6 @@ export default function index() {
       if (idUnPickedDistrict.includes(data.id)) {
         // remove district
         map?.removeLayer(data.layer);
-
-        // remove location on district
-        const unPickedLocation = locationsOnDistricts.filter(
-          (item) => item.id === data.id
-        );
-        unPickedLocation.map((item) => {
-          map?.removeLayer(item.layer);
-          map?.removeLayer(`${item.layer}-name`);
-        });
       } else {
         console.log('nothing');
       }
@@ -210,7 +170,7 @@ export default function index() {
   useEffect(() => {
     if (map !== null) {
       if (markerRef.current) {
-        markerRef.current.remove(); // Xóa marker cũ
+        markerRef.current.remove();
       }
       if (locationResultSearch.length >= 2) {
         const marker = new mapboxgl.Marker()
@@ -222,6 +182,359 @@ export default function index() {
       }
     }
   }, [locationResultSearch, map]);
+
+  // useEffect(() => {
+  //   if (map !== null) {
+  //     if (showOneMarker.coordinate.length > 1) {
+  //       const marker = new mapboxgl.Marker()
+  //         .setLngLat([showOneMarker.coordinate[0], showOneMarker.coordinate[1]])
+  //         .addTo(map);
+
+  //       const handleClickRemove = (popup: mapboxgl.Popup) => {
+  //         marker.remove();
+  //         popup.remove();
+  //       };
+
+  //       const markerLabel = document.createElement('div');
+  //       markerLabel.className = 'marker-label';
+  //       markerLabel.textContent = showOneMarker.name;
+
+  //       const markerElement = marker.getElement();
+  //       markerElement.appendChild(markerLabel);
+
+  //       marker.getElement().addEventListener('click', () => {
+  //         const popup = new mapboxgl.Popup({ closeOnClick: false })
+  //           .setLngLat([showOneMarker.coordinate[0], showOneMarker.coordinate[1]])
+  //           .setHTML(
+  //             `
+  //             <div>
+  //               <button id="button1">Xóa Marker</button>
+  //             </div>
+  //           `
+  //           )
+  //           .addTo(map);
+  //         const button1 = document.getElementById('button1');
+  //         button1?.addEventListener('click', () => handleClickRemove(popup));
+  //       });
+  //     }
+  //   }
+  // }, [showOneMarker, map]);
+
+  // show tat ca Marker
+  // useEffect(() => {
+  //   if (map !== null) {
+  //     if (showMarkerLocation.length > 1) {
+  //       showMarkerLocation.map((item) => {
+  //         const marker = new mapboxgl.Marker()
+  //           .setLngLat([item.coordinate[0], item.coordinate[1]])
+  //           .addTo(map);
+
+  //         const handleClickRemove = (popup: mapboxgl.Popup) => {
+  //           marker.remove();
+  //           popup.remove();
+  //           const markerLabel = document.createElement('div');
+  //           markerLabel.className = 'marker-label';
+  //           markerLabel.textContent = item.name;
+
+  //           const markerElement = marker.getElement();
+  //           markerElement.appendChild(markerLabel);
+
+  //           marker.getElement().addEventListener('click', () => {
+  //             const popup = new mapboxgl.Popup({ closeOnClick: false })
+  //               .setLngLat([item.coordinate[0], item.coordinate[1]])
+  //               .setHTML(
+  //                 `
+  //                 <div>
+  //                   <button id="button1">Xóa Marker</button>
+  //                 </div>
+  //               `
+  //               )
+  //               .addTo(map);
+  //             const button1 = document.getElementById('button1');
+  //             button1?.addEventListener('click', () => handleClickRemove(popup));
+  //           });
+  //         };
+  //       });
+  //     }
+  //   }
+  // }, [showMarkerLocation, map]);
+
+  useEffect(() => {
+    if (dataRoute !== undefined) {
+      if (map !== null) {
+        if (dataRoute) {
+          // const currentPoint: MyFeature = {
+          //   type: 'Feature',
+          //   geometry: {
+          //     type: 'Point',
+          //     coordinates: [current[0], current[1]]
+          //   },
+          //   properties: {
+          //     name: 'Bạn đang ở đây'
+          //   }
+          // };
+
+          // map.addLayer({
+          //   id: 'current-point',
+          //   type: 'circle',
+          //   source: {
+          //     type: 'geojson',
+          //     data: currentPoint
+          //   },
+          //   paint: {
+          //     'circle-color': 'red',
+          //     'circle-radius': 10
+          //   }
+          // });
+
+          // map.addLayer({
+          //   id: 'current-text',
+          //   type: 'symbol',
+          //   source: {
+          //     type: 'geojson',
+          //     data: currentPoint
+          //   },
+          //   layout: {
+          //     'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
+          //     'text-size': 12,
+          //     'text-offset': [0, 2]
+          //   },
+          //   paint: {
+          //     'text-color': 'red'
+          //   }
+          // });
+
+          // map.on('click', 'current-point', function (e) {
+          //   if (map.getSource('current-point')) {
+          //     map.removeLayer('current-point');
+          //     map.removeSource('current-point');
+          //   }
+          //   if (map.getSource('current-text')) {
+          //     map.removeLayer('current-text');
+          //     map.removeSource('current-text');
+          //   }
+          // });
+
+          if (map?.getSource('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+          }
+
+          if (map?.getSource('current-point')) {
+            map.removeLayer('current-point');
+            map.removeSource('current-point');
+          }
+          if (map?.getSource('current-text')) {
+            map.removeLayer('current-text');
+            map.removeSource('current-text');
+          }
+
+          map?.addSource('route', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: { name: 'direction' },
+              geometry: {
+                type: 'LineString',
+                coordinates: dataRoute?.geometry?.coordinates
+              }
+            }
+          });
+
+          map?.addLayer({
+            id: 'route',
+            type: 'line',
+            source: 'route',
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': '#3887be',
+              'line-width': 5,
+              'line-opacity': 0.75
+            }
+          });
+
+          map.addLayer({
+            id: 'current-point',
+            type: 'circle',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [
+                    dataRoute?.geometry?.coordinates[0][0],
+                    dataRoute?.geometry?.coordinates[0][1]
+                  ]
+                },
+                properties: {
+                  name: 'Bạn đang ở đây'
+                }
+              }
+            },
+            paint: {
+              'circle-color': 'red',
+              'circle-radius': 10
+            }
+          });
+
+          map.addLayer({
+            id: 'current-text',
+            type: 'symbol',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [
+                    dataRoute?.geometry?.coordinates[0][0],
+                    dataRoute?.geometry?.coordinates[0][1]
+                  ]
+                },
+                properties: {
+                  name: 'Bạn đang ở đây'
+                }
+              }
+            },
+            layout: {
+              'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
+              'text-size': 12,
+              'text-offset': [0, 2]
+            },
+            paint: {
+              'text-color': 'red'
+            }
+          });
+        }
+
+        // them marker Current
+        // const markerCurrent = new mapboxgl.Marker()
+        //   .setLngLat([current[0], current[1]])
+        //   .addTo(map);
+        // const handleClickRemove = (popup: mapboxgl.Popup) => {
+        //   markerCurrent.remove();
+        //   popup.remove();
+        // };
+
+        // const markerLabel = document.createElement('div');
+        // markerLabel.className = 'marker-label';
+        // markerLabel.textContent = 'Bạn đang ở đây';
+
+        // const markerElement = markerCurrent.getElement();
+        // markerElement.appendChild(markerLabel);
+
+        // markerCurrent.getElement().addEventListener('click', () => {
+        //   const popup = new mapboxgl.Popup({ closeOnClick: false })
+        //     .setLngLat([current[0], current[1]])
+        //     .setHTML(
+        //       `
+        //       <div>
+        //         <button id="button1">Xóa Marker</button>
+        //       </div>
+        //     `
+        //     )
+        //     .addTo(map);
+        //   const button1 = document.getElementById('button1');
+        //   button1?.addEventListener('click', () => handleClickRemove(popup));
+        // });
+
+        const handleDeleteLayerAndSource = () => {
+          if (map?.getLayer('route')) {
+            map.removeLayer('route');
+          }
+          if (map?.getSource('route')) {
+            map.removeSource('route');
+          }
+
+          // markerCurrent.remove();
+          dispatch(setRoute({}));
+          dispatch(setShowDirectionBox(!showDirection));
+        };
+        const deleteButton = document.getElementById(delDirection);
+        deleteButton?.addEventListener('click', handleDeleteLayerAndSource);
+      }
+    }
+  }, [dataRoute, showOneMarker]);
+
+  useEffect(() => {
+    if (map !== null) {
+      if (showOneMarker.coordinate.length > 1) {
+        /* Them layer khi click tung dia diem */
+        const point: MyFeature = {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [showOneMarker.coordinate[0], showOneMarker.coordinate[1]]
+          },
+          properties: {
+            name: showOneMarker.name
+          }
+        };
+
+        map.addLayer({
+          id: `${showOneMarker.name}-point`,
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: point
+          },
+          paint: {
+            'circle-color': 'red',
+            'circle-radius': 10
+          }
+        });
+
+        map.addLayer({
+          id: `${showOneMarker.name}-text`,
+          type: 'symbol',
+          source: {
+            type: 'geojson',
+            data: point
+          },
+          layout: {
+            'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
+            'text-size': 12,
+            'text-offset': [0, 2]
+          },
+          paint: {
+            'text-color': 'red'
+          }
+        });
+
+        map.on('click', `${showOneMarker.name}-point`, function (e) {
+          if (map.getSource(`${showOneMarker.name}-point`)) {
+            map.removeLayer(`${showOneMarker.name}-point`);
+            map.removeSource(`${showOneMarker.name}-point`);
+          }
+          if (map.getSource(`${showOneMarker.name}-text`)) {
+            map.removeLayer(`${showOneMarker.name}-text`);
+            map.removeSource(`${showOneMarker.name}-text`);
+          }
+        });
+
+        /* ----------------------------------------------------------------- */
+      }
+    }
+  }, [showOneMarker]);
+
+  // giai phong bo nho khi unmount component
+  useEffect(() => {
+    return () => {
+      dispatch(setValueDistrict([]));
+      dispatch(setSelectedDistrict([]));
+      dispatch(setSearchResult([]));
+      dispatch(setClickShowMarker([]));
+      dispatch(setCurrentPoint([]));
+      dispatch(setOneMarker({ coordinate: [], name: '' }));
+      dispatch(setRoute({}));
+      dispatch(setRoute({}));
+      dispatch(setShowDirectionBox(false));
+    };
+  }, []);
 
   return (
     <>
@@ -237,24 +550,7 @@ export default function index() {
           <SearchBox />
         </Stack>
 
-        <Slide direction="right" in={showDetail}>
-          <Stack
-            sx={{
-              width: '400px',
-              height: '100%',
-              zIndex: 500,
-              position: 'absolute',
-              borderTop: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: 'white'
-            }}
-          >
-            <DetailLocation />
-          </Stack>
-        </Slide>
-
-        <Slide direction="right" in={idSelected.length > 0 ? true : false}>
+        <Slide direction="right" in={showLocationDistrict}>
           <Stack
             sx={{
               width: '400px',
@@ -268,6 +564,23 @@ export default function index() {
             }}
           >
             <ListLocationDistrict />
+          </Stack>
+        </Slide>
+
+        <Slide direction="right" in={showDirection}>
+          <Stack
+            sx={{
+              width: '400px',
+              height: '100%',
+              zIndex: 1001,
+              position: 'absolute',
+              borderTop: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: 'white'
+            }}
+          >
+            <DirectionBox />
           </Stack>
         </Slide>
 
@@ -321,18 +634,55 @@ export default function index() {
           )}
         </Button>
 
-        {/* <Box
+        <Button
+          onClick={handleDetailLocation}
           sx={{
             position: 'absolute',
-            right: 0,
-            bottom: buttonBottom,
-            zIndex: 1001
+            left: showLocationDistrict ? '380px' : '0px',
+            top: '15%',
+            transform: 'translateY(-50%)',
+            zIndex: 500,
+            transition: 'all 0.2s ease'
           }}
+          size="small"
         >
-          <Button variant="contained" onClick={handleButtonClick} style={{}}>
-            {showStack ? 'Hide' : 'Show'} Menu
-          </Button>
-        </Box> */}
+          {showLocationDistrict ? (
+            <Iconify
+              sx={{ fontSize: '30px' }}
+              icon="solar:double-alt-arrow-left-bold-duotone"
+            />
+          ) : (
+            <Iconify
+              sx={{ fontSize: '30px', transform: 'rotate(180deg)' }}
+              icon="solar:double-alt-arrow-left-bold-duotone"
+            />
+          )}
+        </Button>
+
+        <Button
+          onClick={handleDirection}
+          sx={{
+            position: 'absolute',
+            left: showDirection ? '437px' : '0px',
+            top: '20%',
+            transform: 'translateY(-50%)',
+            zIndex: 500,
+            transition: 'all 0.2s ease'
+          }}
+          size="small"
+        >
+          {showDirection ? (
+            <Iconify
+              sx={{ fontSize: '30px' }}
+              icon="solar:double-alt-arrow-left-bold-duotone"
+            />
+          ) : (
+            <Iconify
+              sx={{ fontSize: '30px', transform: 'rotate(180deg)' }}
+              icon="solar:double-alt-arrow-left-bold-duotone"
+            />
+          )}
+        </Button>
       </Box>
     </>
   );

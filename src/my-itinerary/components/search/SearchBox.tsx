@@ -1,5 +1,5 @@
 import { Stack, TextField, Typography } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { useGetSearch } from 'src/my-itinerary/hooks/useGetSearch';
@@ -11,7 +11,6 @@ import {
 } from 'src/my-itinerary/slice';
 
 export default function SearchBox() {
-  // const [textValue, setTextValue] = useState<string>('');
   const textValue = useSelector(searchText);
   const [showResult, setShowResult] = useState<boolean>(false);
 
@@ -28,11 +27,12 @@ export default function SearchBox() {
   const handleClearText = () => {
     dispatch(setSearchText(''));
   };
-  const { data } = useGetSearch(textValue);
+
+  const { data } = useGetSearch(textValue === 'Vị trí hiện tại' ? '' : textValue);
 
   return (
     <>
-      <Stack direction="column" sx={{ borderRadius: '10px' }}>
+      <Stack direction="column" sx={{ borderRadius: '10px', backgroundColor: 'white' }}>
         <TextField
           size="small"
           label="Search"
@@ -56,7 +56,7 @@ export default function SearchBox() {
               </>
             )
           }}
-          sx={{ backgroundColor: 'white', width: '350px' }}
+          sx={{ width: '350px' }}
           onChange={(e) => handleChange(e)}
         />
         {showResult ? (
