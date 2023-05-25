@@ -38,13 +38,13 @@ export default function MenuDistrict() {
           sx={{
             width: '100px',
             height: '100px',
-            backgroundColor:
-              idSelected.find((value) => value === item.value) === item.value
-                ? 'red'
-                : 'white',
+            border: '1px solid #D3D4D6',
             cursor: 'pointer',
             borderRadius: '10px',
-            boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+            boxShadow:
+              idSelected.find((value) => value === item.value) === item.value
+                ? '0 10px 20px rgba(0, 0, 0, 0.5)'
+                : null,
             display: 'flex',
             justifyContent: 'center',
             justifyItems: 'center',

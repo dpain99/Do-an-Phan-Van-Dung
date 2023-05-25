@@ -1,7 +1,12 @@
-export interface MyFeatureProperties {}
+export interface MyFeatureProperties {
+  name: string;
+  id?: number;
+  src?: string;
+}
 
 export interface MyFeature extends GeoJSON.Feature {
   properties: MyFeatureProperties;
+  geometry: GeoJSON.Point | GeoJSON.LineString | GeoJSON.Polygon;
 }
 
 export interface MyFeatureCollection extends GeoJSON.FeatureCollection {
@@ -19,6 +24,13 @@ export interface IStateSlice {
   searchResult: number[];
   searchText: string;
   itemValue: any;
+  clickShowMarker: { coordinate: number[]; name: string }[];
+  oneMarker: { coordinate: number[]; name: string };
+  route: any;
+  currentPoint: number[];
+  showDirectionBox: boolean;
+  directionVehicle: string;
+  deleteDirection: string;
 }
 
 export interface IDataDistrict {

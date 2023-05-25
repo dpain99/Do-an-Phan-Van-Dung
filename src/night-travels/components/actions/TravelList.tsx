@@ -34,7 +34,6 @@ export default function TravelList() {
     dispatch(setSelectLocations(checked));
     dispatch(setSelectAction(0));
   };
-  console.log('selectedLocation', selectedLocation);
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -96,7 +95,7 @@ export default function TravelList() {
         <Button variant="outlined" sx={{ color: 'grey' }} onClick={handleClose}>
           Hủy
         </Button>
-        <Button variant="outlined" onClick={handleCreate} autoFocus>
+        <Button id="create-direction" variant="outlined" onClick={handleCreate} autoFocus>
           Tạo hành trình
         </Button>
       </Stack>

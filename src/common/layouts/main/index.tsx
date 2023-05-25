@@ -16,7 +16,7 @@ export default function MainLayout() {
 
   return (
     <Stack sx={{ minHeight: 1 }}>
-      <MainHeader />
+      {/* <MainHeader /> */}
 
       <Outlet />
 

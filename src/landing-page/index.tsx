@@ -10,13 +10,13 @@ import MainFooter from 'src/common/layouts/main/MainFooter';
 export default function index() {
   const springsLeft = useSpring({
     from: { x: 0 },
-    to: { x: 70 },
+    to: { x: 50 },
     config: { duration: 1000 }
   });
 
   const springsRight = useSpring({
     from: { x: 0 },
-    to: { x: -70 },
+    to: { x: -50 },
     config: { duration: 1000 }
   });
 
@@ -79,14 +79,14 @@ export default function index() {
             <Box
               sx={{
                 backgroundColor: '#fff',
-                opacity: 0.4,
+                opacity: 0.8,
                 padding: '5px',
                 width: '180px',
                 transition: 'transform 0.2s ease',
                 '&:hover': {
                   transform: 'translateY(-8px)',
                   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  opacity: 0.9,
+
                   bgcolor: '#BC956C',
                   color: 'white',
                   cursor: 'pointer'
@@ -96,23 +96,24 @@ export default function index() {
                 navigation(PATH_DASHBOARD.feature_location.root);
               }}
             >
-              <Iconify icon="mdi:location-favorite" fontSize="30px" />
+              <Iconify
+                icon="fluent:globe-location-20-regular"
+                fontSize="30px"
+                sx={{ color: '#05C101' }}
+              />
               <br />
-              <Typography sx={{ fontWeight: 600, color: 'red' }}>
-                Địa điểm nổi bật
-              </Typography>
+              <Typography sx={{ fontWeight: 600 }}>Địa điểm nổi bật</Typography>
             </Box>
             <Box
               sx={{
                 backgroundColor: '#fff',
-                opacity: 0.4,
+                opacity: 0.8,
                 padding: '5px',
                 width: '180px',
                 transition: 'transform 0.2s ease',
                 '&:hover': {
                   transform: 'translateY(-8px)',
                   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  opacity: 0.9,
                   bgcolor: '#BC956C',
                   color: 'white',
                   cursor: 'pointer'
@@ -122,24 +123,21 @@ export default function index() {
                 navigation(PATH_DASHBOARD.history_culture.root);
               }}
             >
-              <Iconify icon="arcticons:locationprivacy" fontSize="30px" />
+              <Iconify icon="emojione-v1:flag-for-vietnam" sx={{ fontSize: '30px' }} />
               <br />
-              <Typography sx={{ fontWeight: 600, color: 'red' }}>
-                {' '}
-                Lịch sử & văn hóa
-              </Typography>
+              <Typography sx={{ fontWeight: 600 }}> Lịch sử & văn hóa</Typography>
             </Box>
             <Box
               sx={{
                 backgroundColor: '#fff',
-                opacity: 0.4,
+                opacity: 0.8,
                 padding: '5px',
                 width: '180px',
                 transition: 'transform 0.2s ease',
                 '&:hover': {
                   transform: 'translateY(-8px)',
                   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  opacity: 0.9,
+
                   bgcolor: '#BC956C',
                   color: 'white',
                   cursor: 'pointer'
@@ -149,12 +147,13 @@ export default function index() {
                 navigation(PATH_DASHBOARD.food_locations.root);
               }}
             >
-              <Iconify icon="ic:sharp-food-bank" fontSize="30px" />
+              <Iconify
+                icon="carbon:noodle-bowl"
+                fontSize="30px"
+                sx={{ color: '#00C0A7' }}
+              />
               <br />
-              <Typography sx={{ fontWeight: 600, color: 'red' }}>
-                {' '}
-                Ẩm thực địa phương
-              </Typography>
+              <Typography sx={{ fontWeight: 600 }}> Ẩm thực địa phương</Typography>
             </Box>
           </Stack>
         </Box>
@@ -166,7 +165,7 @@ export default function index() {
           justifyContent: 'space-between',
           width: '100%',
           backgroundImage:
-            'url(https://media.istockphoto.com/id/1200966145/vi/vec-to/h%C3%ACnh-%E1%BA%A3nh-ho%E1%BA%A1t-h%C3%ACnh-%C4%91%E1%BA%B9p-ngang-n%C3%BAi-v%E1%BB%9Bi-con-%C4%91%C6%B0%E1%BB%9Dng-kh%C3%A1i-ni%E1%BB%87m-thi%C3%AAn-nhi%C3%AAn-beatiful-ki%E1%BB%83u-ph%E1%BA%B3ng.jpg?s=612x612&w=0&k=20&c=o6vGcfrki_HJGv8n3RJwKWIAa2Ce3N2d2fEjn_57zTM=)'
+            'url("https://nhadepso.com/wp-content/uploads/2023/01/tai-ngay-99-anh-bau-troi-dem-day-sao-dep-lung-linh-huyen-ao_11.jpg")'
         }}
       >
         <Stack
@@ -197,7 +196,7 @@ export default function index() {
             bgcolor: 'white',
             boxShadow: '0 0 5px #000',
             backgroundImage:
-              'url(https://treobangron.com.vn/wp-content/uploads/2022/09/background-dep-1-3.jpg)'
+              'url(https://toigingiuvedep.vn/wp-content/uploads/2021/08/anh-bau-troi-dep-de-ghep-anh.jpg)'
           }}
         >
           <Stack
@@ -234,7 +233,7 @@ export default function index() {
               <animated.div style={{ ...springsLeft }}>
                 <Box
                   component="img"
-                  src="https://png.pngtree.com/thumb_back/fw800/20160925/pngtree-Skyscraper-City-Skyline-Night-background-photo-790203.jpg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Emblem_of_Hanoi.svg/1200px-Emblem_of_Hanoi.svg.png"
                   alt="anh-ban-dem"
                   sx={{
                     width: '100px',
@@ -248,7 +247,7 @@ export default function index() {
                     }
                   }}
                   onClick={() => {
-                    navigation(PATH_DASHBOARD.night_travels.root);
+                    navigation(PATH_DASHBOARD.feature_location.root);
                   }}
                 />
                 <Typography
@@ -257,18 +256,19 @@ export default function index() {
                     justifyContent: 'center'
                   }}
                 >
-                  Ban Đêm
+                  Nổi bật
                 </Typography>
               </animated.div>
 
-              <animated.div
-                style={{
-                  ...springsRight
+              <Stack
+                sx={{
+                  display: 'flex',
+                  alignSelf: 'center'
                 }}
               >
                 <Box
                   component="img"
-                  src="https://img.freepik.com/vetores-premium/carros-na-rodovia-para-a-cidade-vista-em-perspectiva-da-estrada-da-cidade-paisagem-urbana-com-carros-e-ilustracao-dos-desenhos-animados-do-vetor-de-viagens-de-carro-automoveis-indo-em-direcao-a-megalopole-com-arranha-ceus-e-edificios-modernos_102902-2494.jpg"
+                  src="https://vyctravel.com/libs/upload/ckfinder/images/VYC/3b6d6c57182523_59dbacc5e56f8_800x458.jpg"
                   alt="anh-ban-dem"
                   sx={{
                     width: '100px',
@@ -280,14 +280,52 @@ export default function index() {
                       transform: 'rotate(720deg)'
                     }
                   }}
+                  onClick={() => {
+                    navigation(PATH_DASHBOARD.history_culture.root);
+                  }}
                 />
+
                 <Typography
                   sx={{
                     display: 'flex',
                     justifyContent: 'center'
                   }}
                 >
-                  Ban Ngày
+                  Lịch sử
+                </Typography>
+              </Stack>
+
+              <animated.div
+                style={{
+                  ...springsRight
+                }}
+              >
+                <Box
+                  component="img"
+                  src="https://cafefcdn.com/2018/7/19/photo-2-1531984647242593960017.png"
+                  alt="anh-ban-dem"
+                  sx={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                    borderRadius: '50%',
+                    transition: 'transform 1s ease',
+                    ':hover': {
+                      transform: 'rotate(720deg)'
+                    }
+                  }}
+                  onClick={() => {
+                    navigation(PATH_DASHBOARD.food_locations.root);
+                  }}
+                />
+
+                <Typography
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  Ẩm thực
                 </Typography>
               </animated.div>
             </Stack>
@@ -312,7 +350,7 @@ export default function index() {
             alignItems: 'center',
             padding: '10px',
             backgroundImage:
-              'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGyea252bkYoYgpPi52T2_kjlNBy5lMjmM-w&usqp=CAU")',
+              'url("https://img6.thuthuatphanmem.vn/uploads/2022/03/04/background-bau-troi-de-thuong_034129499.jpg")',
             backgroundSize: 'cover'
           }}
         >

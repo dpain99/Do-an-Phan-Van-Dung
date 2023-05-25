@@ -1,9 +1,12 @@
+import { HoangMaiDistrict } from './HoangMaiDistrict';
 import { IDataDistrict } from '../interface';
 import { BaDinhDistrict } from './BaDinhDistrict';
+import { BacTuLiemDistrict } from './BacTuLiemDistrict';
 import { CauGiayDistrict } from './CauGiayDistrict';
 import { DongDaDistrict } from './DongDaDistrict';
 import { HaiBaTrungDistrict } from './HaiBaTrungDistrict';
 import { HoanKiemDistrict } from './HoanKiemDistrict';
+import { NamTuLiemDistrict } from './NamTuLiemDistrict';
 import { TayHoDistrict } from './TayHoDistrict';
 import { ThanhXuanDistrict } from './ThanhXuanDistrict';
 
@@ -62,14 +65,21 @@ const districts: IDataDistrict[] = [
     layer: 'BacTuLiem-layer',
     color: 'blue',
     id: 8,
-    value: ThanhXuanDistrict
+    value: BacTuLiemDistrict
   },
   {
     src: 'NamTuLiem-src',
     layer: 'NamTuLiem-layer',
     color: 'blue',
     id: 9,
-    value: ThanhXuanDistrict
+    value: NamTuLiemDistrict
+  },
+  {
+    src: 'HoangMai-src',
+    layer: 'HoangMai-layer',
+    color: 'blue',
+    id: 10,
+    value: HoangMaiDistrict
   }
 ];
 
