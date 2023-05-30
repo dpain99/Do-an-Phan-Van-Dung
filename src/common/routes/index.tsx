@@ -81,7 +81,8 @@ export default function Router() {
         { path: 'my-itinerary', element: <MyItinerary /> },
         { path: 'history-culture', element: <HistoryCulture /> },
         { path: 'food-locations', element: <FoodLocations /> },
-        { path: 'night-travels', element: <NightTravels /> }
+        { path: 'night-travels', element: <NightTravels /> },
+        { path: 'feature-blog', element: <FeatureBlog /> }
         // { path: 'ecommerce', element: <GeneralEcommerce /> },
         // { path: 'analytics', element: <GeneralAnalytics /> },
         // { path: 'banking', element: <GeneralBanking /> },
@@ -157,8 +158,12 @@ const MyItinerary = Loadable(lazy(() => import('../../my-itinerary/index')));
 
 // Food-Locations
 const FoodLocations = Loadable(lazy(() => import('../../food-locations/index')));
+
 // Night-Travels
 const NightTravels = Loadable(lazy(() => import('../../night-travels/index')));
+
+// Feature-Blog
+const FeatureBlog = Loadable(lazy(() => import('../../feature-blog/index')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const Page403 = Loadable(lazy(() => import('../pages/Page403')));

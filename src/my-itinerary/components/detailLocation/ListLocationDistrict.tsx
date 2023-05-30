@@ -19,12 +19,14 @@ import {
   clickShowMarker,
   selectedDistrict,
   setClickShowMarker,
+  setDeleteOneMarker,
   setOneMarker,
   setShowDirectionBox
 } from 'src/my-itinerary/slice';
 
 export default function ListLocationDistrict() {
   const idDistrict = useSelector(selectedDistrict);
+  const lastIdDistrict = idDistrict[idDistrict.length - 1];
   const showMarker = useSelector(clickShowMarker);
   const [arrMarker, setArrMarker] = useState<{ coordinate: number[]; name: string }[]>(
     []
@@ -50,6 +52,26 @@ export default function ListLocationDistrict() {
     dispatch(setOneMarker({ coordinate: value, name: item }));
   };
 
+  const handleClickDeleteMarker = (value: number[], item: string) => {
+    const newShowMarker = showMarker.filter((marker) => {
+      return !(
+        marker.coordinate[0] === value[0] &&
+        marker.coordinate[1] === value[1] &&
+        marker.name === item
+      );
+    });
+
+    newShowMarker.push({ coordinate: value, name: item });
+    const visitedMarkers = new Set<{ value: number[]; item: string }>();
+    const isMarkerVisited = visitedMarkers.has({ value, item });
+    if (!isMarkerVisited) {
+      dispatch(setDeleteOneMarker({ coordinate: value, name: item }));
+      visitedMarkers.add({ value, item });
+    }
+
+    dispatch(setDeleteOneMarker({ coordinate: value, name: item }));
+  };
+
   const handleClickDirection = (value: number[], item: string) => {
     dispatch(setOneMarker({ coordinate: value, name: item }));
     dispatch(setShowDirectionBox(true));
@@ -65,7 +87,6 @@ export default function ListLocationDistrict() {
           { coordinate: locationOne, name: value.properties.name }
         ]);
       });
-    console.log('arr', arrMarker);
     dispatch(setClickShowMarker(arrMarker));
   };
 
@@ -87,7 +108,7 @@ export default function ListLocationDistrict() {
           sx={{ marginTop: 2, fontWeight: 600, fontSize: '20px', alignSelf: 'center' }}
         >
           Danh sách địa điểm ở{' '}
-          {nameDistrict.find((item) => item.value === idDistrict[0])?.label}
+          {nameDistrict.find((item) => item.value === lastIdDistrict)?.label}
         </Typography>
 
         <Divider />
@@ -117,7 +138,7 @@ export default function ListLocationDistrict() {
         {/* <Divider /> */}
 
         {locationsOnDistricts
-          .find((item) => item.id === idDistrict[0])
+          .find((item) => item.id === lastIdDistrict)
           ?.value.features.map((item) => (
             <Stack direction="row" sx={{ alignItems: 'center' }} key={item.properties.id}>
               <Typography
@@ -160,7 +181,7 @@ export default function ListLocationDistrict() {
                       >
                         <Iconify
                           icon="ic:baseline-assistant-direction"
-                          sx={{ fontSize: '25px', color: '#04F2F2' }}
+                          sx={{ fontSize: '25px', color: '#34A853' }}
                         />
                       </Button>
                     </Tooltip>
@@ -176,6 +197,21 @@ export default function ListLocationDistrict() {
                         <Iconify
                           icon="majesticons:map-simple-marker-line"
                           sx={{ fontSize: '25px', color: '#04F2F2' }}
+                        />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip title={'Xóa khỏi trên map'} sx={{ zIndex: 2000 }}>
+                      <Button
+                        onClick={() =>
+                          handleClickDeleteMarker(
+                            item.geometry.coordinates as unknown as number[],
+                            item.properties.name
+                          )
+                        }
+                      >
+                        <Iconify
+                          icon="ep:remove"
+                          sx={{ fontSize: '25px', color: '#BA3329' }}
                         />
                       </Button>
                     </Tooltip>

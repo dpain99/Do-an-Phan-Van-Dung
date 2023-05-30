@@ -24,7 +24,7 @@ export default function ShowListSelected() {
       </Typography>
       {listLocation?.map((item, index) => (
         <>
-          <Typography>
+          <Typography key={index}>
             {index + 1}. {convertNumber(item)?.label}
           </Typography>
         </>

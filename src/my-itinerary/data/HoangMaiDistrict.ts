@@ -6,7 +6,8 @@ export const HoangMaiDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.8436893624731, 20.978216633823887]
       },
       geometry: {
         type: 'Polygon',

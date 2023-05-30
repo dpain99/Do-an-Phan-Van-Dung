@@ -13,6 +13,7 @@ import { dispatch } from 'src/common/redux/store';
 import { setLocation, setTab } from '../slice';
 import { LoadingButton, TabContext } from '@mui/lab';
 import { convertNumber } from '../utils/convertNumber';
+import useMessage from 'src/common/hooks/useMessage';
 
 function not(a: readonly number[], b: readonly number[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -32,10 +33,18 @@ export default function TransferList() {
   const [right, setRight] = React.useState<number[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const handleCreate = () => {
-    dispatch(setLocation(right));
-    setLoading(true);
-    dispatch(setTab(2));
+    if (right.length === 1) {
+      showErrorSnackbar('Danh sách đã chọn phải có ít nhất 2 địa điểm');
+    } else if (right.length === 0) {
+      showErrorSnackbar('Bạn chưa chọn địa điểm nào');
+    } else {
+      dispatch(setLocation(right));
+      setLoading(true);
+      dispatch(setTab(2));
+      showSuccessSnackbar('Khởi tạo hành trình thành công');
+    }
   };
 
   const leftChecked = intersection(checked, left);

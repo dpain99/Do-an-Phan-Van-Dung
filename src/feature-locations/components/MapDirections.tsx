@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch } from 'src/common/redux/store';
-import { location, setRoute } from '../slice';
+import { location, setLocation, setRoute } from '../slice';
 import { convertCoordinate } from '../utils/convertCoordinate';
 import DetailDirection from './DetailDirection';
 import './MapboxDirections.css';
@@ -155,11 +155,18 @@ export default function MapDirections() {
     }
   }, [current]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(setLocation([]));
+      dispatch(setRoute({}));
+    };
+  }, []);
+
   return (
     <Box
       id="map"
       style={{
-        height: '80vh',
+        height: '85vh',
         width: '100%',
         borderRadius: '5px',
         position: 'relative'
@@ -206,7 +213,7 @@ export default function MapDirections() {
           onClick={handleToggleStack}
           sx={{
             position: 'absolute',
-            left: showTextDirection ? '410px' : '0px',
+            left: showTextDirection ? '460px' : '0px',
             top: '13%',
             transform: 'translateY(-50%)',
             zIndex: 1000,

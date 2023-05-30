@@ -6,7 +6,8 @@ export const LongBienDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.88493733850828, 21.022139296181166]
       },
       geometry: {
         type: 'Polygon',

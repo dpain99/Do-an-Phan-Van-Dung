@@ -1,5 +1,5 @@
-import { Stack, TextField, Typography } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { Box, Stack, TextField, Typography } from '@mui/material';
+import { ChangeEvent, useState } from 'react';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch, useSelector } from 'src/common/redux/store';
 import { useGetSearch } from 'src/my-itinerary/hooks/useGetSearch';
@@ -26,6 +26,7 @@ export default function SearchBox() {
   };
   const handleClearText = () => {
     dispatch(setSearchText(''));
+    dispatch(setSearchResult([]));
   };
 
   const { data } = useGetSearch(textValue === 'Vị trí hiện tại' ? '' : textValue);
@@ -37,6 +38,7 @@ export default function SearchBox() {
           size="small"
           label="Search"
           value={textValue}
+          placeholder="Vui lòng nhập địa chỉ"
           InputProps={{
             endAdornment: (
               <>
@@ -94,11 +96,19 @@ export default function SearchBox() {
                   }
                 >
                   <Iconify
-                    icon="basil:map-location-solid"
-                    sx={{ marginBottom: '2px' }}
+                    icon="ep:location-filled"
+                    sx={{
+                      marginBottom: '2px',
+                      fontSize: '20px',
+                      marginRight: '5px',
+                      color: '#1B98E0'
+                    }}
                     key={item.id}
                   />
-                  {item.place_name}
+
+                  {item.place_name.length > 43
+                    ? `${item.place_name.slice(0, 35)}...`
+                    : item.place_name}
                 </Typography>
               </>
             ))}

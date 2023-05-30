@@ -10,11 +10,13 @@ const initialState: IStateSlice = {
   itemValue: {},
   clickShowMarker: [{ coordinate: [], name: '' }],
   oneMarker: { coordinate: [], name: '' },
+  deleteOneMarker: { coordinate: [], name: '' },
   route: {},
-  currentPoint: [0, 0],
+  currentPoint: [105.8206194674218, 21.036038930998174],
   showDirectionBox: false,
   directionVehicle: 'driving-traffic',
-  deleteDirection: 'delete-direction'
+  deleteDirection: 'delete-direction',
+  styleMap: 'mapbox://styles/mapbox/streets-v11'
 };
 
 export const itineraryReducer = createSlice({
@@ -46,6 +48,12 @@ export const itineraryReducer = createSlice({
     setOneMarker(state, action: PayloadAction<{ coordinate: number[]; name: string }>) {
       state.oneMarker = action.payload;
     },
+    setDeleteOneMarker(
+      state,
+      action: PayloadAction<{ coordinate: number[]; name: string }>
+    ) {
+      state.deleteOneMarker = action.payload;
+    },
     setRoute(state, action: PayloadAction<any>) {
       state.route = action.payload;
     },
@@ -60,6 +68,9 @@ export const itineraryReducer = createSlice({
     },
     setDeleteDirection(state, action: PayloadAction<string>) {
       state.deleteDirection = action.payload;
+    },
+    setStyleMap(state, action: PayloadAction<string>) {
+      state.styleMap = action.payload;
     }
   }
 });
@@ -76,7 +87,9 @@ export const {
   setCurrentPoint,
   setShowDirectionBox,
   setDirectionVehicle,
-  setDeleteDirection
+  setDeleteDirection,
+  setStyleMap,
+  setDeleteOneMarker
 } = itineraryReducer.actions;
 
 export const districtValue = (state: RootState) => state.itineraryReducer.valueDistrict;
@@ -88,6 +101,8 @@ export const itemValue = (state: RootState) => state.itineraryReducer.itemValue;
 export const clickShowMarker = (state: RootState) =>
   state.itineraryReducer.clickShowMarker;
 export const oneMarker = (state: RootState) => state.itineraryReducer.oneMarker;
+export const deleteOneMarker = (state: RootState) =>
+  state.itineraryReducer.deleteOneMarker;
 export const route = (state: RootState) => state.itineraryReducer.route;
 export const currentPoint = (state: RootState) => state.itineraryReducer.currentPoint;
 export const showDirectionBox = (state: RootState) =>
@@ -96,5 +111,6 @@ export const directionVehicle = (state: RootState) =>
   state.itineraryReducer.directionVehicle;
 export const deleteDirection = (state: RootState) =>
   state.itineraryReducer.deleteDirection;
+export const styleMap = (state: RootState) => state.itineraryReducer.styleMap;
 
 export default itineraryReducer.reducer;

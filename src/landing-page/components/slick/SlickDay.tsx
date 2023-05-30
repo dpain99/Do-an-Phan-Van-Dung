@@ -23,7 +23,8 @@ export default function SlickDay() {
           width: '32vw',
           height: '229px',
           padding: '10px',
-          objectFit: 'cover'
+          objectFit: 'cover',
+          borderRadius: '9px'
         }}
       />
       <Box

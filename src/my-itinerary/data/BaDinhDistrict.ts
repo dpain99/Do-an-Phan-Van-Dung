@@ -6,7 +6,8 @@ export const BaDinhDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.8206194674218, 21.036038930998174]
       },
       geometry: {
         type: 'Polygon',

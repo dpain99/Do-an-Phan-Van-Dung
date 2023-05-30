@@ -6,7 +6,8 @@ export const BacTuLiemDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.76621737206136, 21.084284781606545]
       },
       geometry: {
         type: 'Polygon',
