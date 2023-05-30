@@ -1,22 +1,31 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Tooltip, Typography } from '@mui/material';
 import { animated, useSpring } from '@react-spring/web';
+import { useNavigate } from 'react-router-dom';
 import Iconify from 'src/common/components/Iconify';
+import MainFooter from 'src/common/layouts/main/MainFooter';
+import { PATH_DASHBOARD } from 'src/common/routes/paths';
 import SlickDay from './components/slick/SlickDay';
 import SlickNight from './components/slick/SlickNight';
-import { useNavigate } from 'react-router-dom';
-import { PATH_DASHBOARD } from 'src/common/routes/paths';
-import MainFooter from 'src/common/layouts/main/MainFooter';
+import TitleAnimation from './components/TitleAnimation';
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
+</style>;
+<style>
+  @import
+  url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
+</style>;
 
 export default function index() {
   const springsLeft = useSpring({
-    from: { x: 0 },
-    to: { x: 50 },
+    from: { x: -50 },
+    to: { x: 0 },
     config: { duration: 1000 }
   });
 
   const springsRight = useSpring({
-    from: { x: 0 },
-    to: { x: -50 },
+    from: { x: 50 },
+    to: { x: 0 },
     config: { duration: 1000 }
   });
 
@@ -58,52 +67,83 @@ export default function index() {
         >
           <Typography
             sx={{
-              fontFamily: 'Arial',
-              fontSize: '4rem',
+              fontFamily: 'Allura, cursive',
+              fontSize: '4.5rem',
               fontWeight: 'bold',
-              color: '#ffffff',
-              border: '5px solid white',
-              padding: '0 10px 0 10px'
+              color: '#ffffff'
+              // border: '5px solid white',
+              // padding: '0 10px 0 10px'
             }}
           >
             Khám Phá Hà Nội
           </Typography>
-          <Typography sx={{ color: 'white', marginTop: 3 }}>
-            Những điều thú vị đang chờ bạn phía trước! tham gia ngay với chúng tôi
+          <Typography sx={{ color: 'white', marginTop: 3, fontSize: '25px' }}>
+            Những điều thú vị đang chờ bạn phía trước!
           </Typography>
           <Stack
             direction="row"
             spacing={2}
             sx={{ display: 'flex', justifyContent: 'center', marginTop: 5 }}
           >
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                opacity: 0.8,
-                padding: '5px',
-                width: '180px',
-                transition: 'transform 0.2s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+            <animated.div style={{ ...springsLeft }}>
+              <Box
+                sx={{
+                  backgroundColor: '#fff',
+                  opacity: 0.8,
+                  padding: '5px',
+                  width: '180px',
+                  transition: 'transform 0.2s ease',
+                  borderRadius: '10px',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
 
-                  bgcolor: '#BC956C',
-                  color: 'white',
-                  cursor: 'pointer'
-                }
-              }}
-              onClick={() => {
-                navigation(PATH_DASHBOARD.feature_location.root);
-              }}
-            >
-              <Iconify
-                icon="fluent:globe-location-20-regular"
-                fontSize="30px"
-                sx={{ color: '#05C101' }}
-              />
-              <br />
-              <Typography sx={{ fontWeight: 600 }}>Địa điểm nổi bật</Typography>
-            </Box>
+                    bgcolor: '#BC956C',
+                    color: 'white',
+                    cursor: 'pointer'
+                  }
+                }}
+                onClick={() => {
+                  navigation(PATH_DASHBOARD.feature_location.root);
+                }}
+              >
+                <Iconify
+                  icon="fluent:globe-location-20-regular"
+                  fontSize="30px"
+                  sx={{ color: '#05C101' }}
+                />
+                <br />
+                <Typography sx={{ fontWeight: 600 }}>Địa điểm nổi bật</Typography>
+              </Box>
+              {/* <Box
+                  component="img"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Emblem_of_Hanoi.svg/1200px-Emblem_of_Hanoi.svg.png"
+                  alt="anh-ban-dem"
+                  sx={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                    borderRadius: '50%',
+                    transition: 'transform 1s ease',
+                    ':hover': {
+                      transform: 'rotate(720deg)',
+                      pointer: 'cursor'
+                    }
+                  }}
+                  onClick={() => {
+                    navigation(PATH_DASHBOARD.feature_location.root);
+                  }}
+                />
+                <Typography
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  Nổi bật
+                </Typography> */}
+            </animated.div>
+
             <Box
               sx={{
                 backgroundColor: '#fff',
@@ -111,6 +151,7 @@ export default function index() {
                 padding: '5px',
                 width: '180px',
                 transition: 'transform 0.2s ease',
+                borderRadius: '10px',
                 '&:hover': {
                   transform: 'translateY(-8px)',
                   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
@@ -127,34 +168,69 @@ export default function index() {
               <br />
               <Typography sx={{ fontWeight: 600 }}> Lịch sử & văn hóa</Typography>
             </Box>
-            <Box
-              sx={{
-                backgroundColor: '#fff',
-                opacity: 0.8,
-                padding: '5px',
-                width: '180px',
-                transition: 'transform 0.2s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
 
-                  bgcolor: '#BC956C',
-                  color: 'white',
-                  cursor: 'pointer'
-                }
-              }}
-              onClick={() => {
-                navigation(PATH_DASHBOARD.food_locations.root);
+            <animated.div
+              style={{
+                ...springsRight
               }}
             >
-              <Iconify
-                icon="carbon:noodle-bowl"
-                fontSize="30px"
-                sx={{ color: '#00C0A7' }}
-              />
-              <br />
-              <Typography sx={{ fontWeight: 600 }}> Ẩm thực địa phương</Typography>
-            </Box>
+              <Box
+                sx={{
+                  backgroundColor: '#fff',
+                  opacity: 0.8,
+                  padding: '5px',
+                  width: '180px',
+                  transition: 'transform 0.2s ease',
+                  borderRadius: '10px',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+
+                    bgcolor: '#BC956C',
+                    color: 'white',
+                    cursor: 'pointer'
+                  }
+                }}
+                onClick={() => {
+                  navigation(PATH_DASHBOARD.food_locations.root);
+                }}
+              >
+                <Iconify
+                  icon="carbon:noodle-bowl"
+                  fontSize="30px"
+                  sx={{ color: '#00C0A7' }}
+                />
+                <br />
+                <Typography sx={{ fontWeight: 600 }}> Ẩm thực địa phương</Typography>
+              </Box>
+              {/* <Box
+                  component="img"
+                  src="https://cafefcdn.com/2018/7/19/photo-2-1531984647242593960017.png"
+                  alt="anh-ban-dem"
+                  sx={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                    borderRadius: '50%',
+                    transition: 'transform 1s ease',
+                    ':hover': {
+                      transform: 'rotate(720deg)'
+                    }
+                  }}
+                  onClick={() => {
+                    navigation(PATH_DASHBOARD.food_locations.root);
+                  }}
+                />
+
+                <Typography
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  Ẩm thực
+                </Typography> */}
+            </animated.div>
           </Stack>
         </Box>
       </Box>
@@ -164,8 +240,10 @@ export default function index() {
         sx={{
           justifyContent: 'space-between',
           width: '100%',
-          backgroundImage:
-            'url("https://nhadepso.com/wp-content/uploads/2023/01/tai-ngay-99-anh-bau-troi-dem-day-sao-dep-lung-linh-huyen-ao_11.jpg")'
+          background: 'linear-gradient(to bottom, #2478B4, #AC93BB)'
+          // bgcolor: '#5183C0'
+          // backgroundImage:
+          //   'url("https://nhadepso.com/wp-content/uploads/2023/01/tai-ngay-99-anh-bau-troi-dem-day-sao-dep-lung-linh-huyen-ao_11.jpg")'
         }}
       >
         <Stack
@@ -181,6 +259,7 @@ export default function index() {
           <SlickDay />
         </Stack>
       </Stack>
+
       <Stack sx={{ alignItems: 'center' }}>
         <Box
           sx={{
@@ -208,7 +287,8 @@ export default function index() {
               width: '100%'
             }}
           >
-            <Typography
+            <TitleAnimation />
+            {/* <Typography
               sx={{
                 position: 'absolute',
                 top: '20px',
@@ -216,118 +296,58 @@ export default function index() {
                 fontSize: '25px'
               }}
             >
-              Chọn hành trình
-            </Typography>
-            <Iconify
+              Khám phá địa điểm
+            </Typography> */}
+            {/* <Iconify
               icon="ph:needle-light"
               sx={{ fontSize: '50px', color: 'red', transform: 'skew(90deg)' }}
-            />
+            /> */}
             <Stack
-              direction="row"
-              spacing={3}
+              direction="column"
+              // // spacing={3}
               sx={{
-                width: '100%',
-                justifyContent: 'space-between'
+                alignItems: 'center',
+                marginBottom: 4
               }}
             >
-              <animated.div style={{ ...springsLeft }}>
-                <Box
-                  component="img"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Emblem_of_Hanoi.svg/1200px-Emblem_of_Hanoi.svg.png"
-                  alt="anh-ban-dem"
-                  sx={{
-                    width: '100px',
-                    height: '100px',
-                    objectFit: 'cover',
-                    borderRadius: '50%',
-                    transition: 'transform 1s ease',
-                    ':hover': {
-                      transform: 'rotate(720deg)',
-                      pointer: 'cursor'
-                    }
-                  }}
-                  onClick={() => {
-                    navigation(PATH_DASHBOARD.feature_location.root);
-                  }}
-                />
-                <Typography
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
-                >
-                  Nổi bật
-                </Typography>
-              </animated.div>
+              <Box
+                // component="img"
+                // src="https://vyctravel.com/libs/upload/ckfinder/images/VYC/3b6d6c57182523_59dbacc5e56f8_800x458.jpg"
+                // alt="anh-ban-dem"
+                sx={{
+                  width: '100px',
+                  height: '100px',
+                  // objectFit: 'cover',
+                  borderRadius: '50%',
+                  transition: 'transform 1s ease',
+                  ':hover': {
+                    transform: 'rotate(720deg)',
+                    cursor: 'pointer'
+                  },
+                  bgcolor: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  justifyItems: 'center'
+                }}
+                onClick={() => {
+                  navigation(PATH_DASHBOARD.my_itinerary.root);
+                }}
+              >
+                <Iconify icon="logos:discover" />
+              </Box>
 
-              <Stack
+              <Typography
                 sx={{
                   display: 'flex',
-                  alignSelf: 'center'
+                  justifyContent: 'center',
+                  fontFamily: 'Dancing Script, cursive',
+                  marginTop: 2,
+                  fontSize: '25px'
                 }}
               >
-                <Box
-                  component="img"
-                  src="https://vyctravel.com/libs/upload/ckfinder/images/VYC/3b6d6c57182523_59dbacc5e56f8_800x458.jpg"
-                  alt="anh-ban-dem"
-                  sx={{
-                    width: '100px',
-                    height: '100px',
-                    objectFit: 'cover',
-                    borderRadius: '50%',
-                    transition: 'transform 1s ease',
-                    ':hover': {
-                      transform: 'rotate(720deg)'
-                    }
-                  }}
-                  onClick={() => {
-                    navigation(PATH_DASHBOARD.history_culture.root);
-                  }}
-                />
-
-                <Typography
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
-                >
-                  Lịch sử
-                </Typography>
-              </Stack>
-
-              <animated.div
-                style={{
-                  ...springsRight
-                }}
-              >
-                <Box
-                  component="img"
-                  src="https://cafefcdn.com/2018/7/19/photo-2-1531984647242593960017.png"
-                  alt="anh-ban-dem"
-                  sx={{
-                    width: '100px',
-                    height: '100px',
-                    objectFit: 'cover',
-                    borderRadius: '50%',
-                    transition: 'transform 1s ease',
-                    ':hover': {
-                      transform: 'rotate(720deg)'
-                    }
-                  }}
-                  onClick={() => {
-                    navigation(PATH_DASHBOARD.food_locations.root);
-                  }}
-                />
-
-                <Typography
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
-                >
-                  Ẩm thực
-                </Typography>
-              </animated.div>
+                Khám phá địa điểm
+              </Typography>
             </Stack>
           </Stack>
         </Box>
@@ -335,36 +355,137 @@ export default function index() {
 
       <Stack
         sx={{
-          marginTop: 5,
+          // marginTop: 5,
           width: '100%',
           alignItems: 'center',
-          marginBottom: 5
+          bgcolor: '#AC93BB'
         }}
       >
         <Box
           sx={{
             borderRadius: '10px',
-            width: '60vw',
+            marginTop: 5,
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             padding: '10px',
-            backgroundImage:
-              'url("https://img6.thuthuatphanmem.vn/uploads/2022/03/04/background-bau-troi-de-thuong_034129499.jpg")',
-            backgroundSize: 'cover'
+            height: '550px'
           }}
         >
-          <Typography sx={{ marginBottom: 3, fontSize: '20px', color: 'white' }}>
-            Khám phá địa điểm
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigation(PATH_DASHBOARD.my_itinerary.root);
-            }}
+          <Typography
+            sx={{ marginTop: 3, marginBottom: 2, fontSize: '40px', color: 'white' }}
           >
-            Bắt đầu
-          </Button>
+            Hà Nội có gì?
+          </Typography>
+
+          <Stack direction="row" spacing={5} sx={{ position: 'relative' }}>
+            <Typography
+              sx={{
+                fontSize: '20px',
+                width: '380px',
+                color: 'white',
+                bgcolor: '#2B2B37',
+                padding: '20px',
+                borderRadius: '10px',
+                textAlign: 'justify',
+                lineHeight: 1.5
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{ justifyContent: 'center', marginBottom: 2 }}
+              >
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+              </Stack>
+              Hà Nội là điểm đến hấp dẫn nếu bạn muốn khám phá du lịch miền Bắc. Chuyến
+              hành trình du lịch Hà Nội “gây thương nhớ” với du khách bởi một màu sắc rất
+              riêng, “rất Hà Nội”. Đó là những phố cổ xưa cũ, các di tích lịch sử nhuộm
+              màu thời gian và vô số địa điểm giải trí vui hết nấc khác.
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: '20px',
+                width: '380px',
+                color: 'white',
+                bgcolor: '#2B2B37',
+                padding: '20px',
+                borderRadius: '10px',
+                textAlign: 'justify',
+                lineHeight: 1.5
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{ justifyContent: 'center', marginBottom: 2 }}
+              >
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+              </Stack>
+              Bạn băn khoăn chưa biết địa điểm gần mình có những địa điểm du lịch nào? Bạn
+              muốn xem hành trình tới những địa điểm đó? Bạn muốn xem vị trí của những địa
+              điểm trên bản đồ? Công cụ này ở đây để giúp bạn. Bắt đầu hành trình của
+              chúng ta ngay thôi nào!
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: '20px',
+                width: '380px',
+                color: 'white',
+                bgcolor: '#2B2B37',
+                padding: '20px',
+                borderRadius: '10px',
+                textAlign: 'justify',
+                lineHeight: 1.5
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{ justifyContent: 'center', marginBottom: 2 }}
+              >
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+                <Iconify
+                  icon="line-md:star-pulsating-loop"
+                  sx={{ color: 'yellow', fontSize: '30px' }}
+                />
+              </Stack>
+              Mỗi hành trình đều mang lại nhiều bài học, mỗi bài học khiến bản thân hoàn
+              thiện hơn. Dù website còn nhiều thiếu sót, nhưng khi nhận ra ta đang thiếu
+              sót, tức là ta đang muốn học hỏi để có thể phát triển. Mọi ý kiến đóng góp
+              vui lòng liên hệ vào các địa chỉ dưới cùng trang web.
+            </Typography>
+          </Stack>
         </Box>
       </Stack>
       <MainFooter />

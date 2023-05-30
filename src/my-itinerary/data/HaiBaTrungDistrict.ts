@@ -6,7 +6,8 @@ export const HaiBaTrungDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.85900782710094, 21.007053349296967]
       },
       geometry: {
         type: 'Polygon',

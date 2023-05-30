@@ -6,6 +6,7 @@ import { Grid, Link, Divider, Container, Typography, Stack } from '@mui/material
 import { PATH_PAGE } from '../../routes/paths';
 // components
 import Logo from '../../components/Logo';
+import Iconify from 'src/common/components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -45,72 +46,81 @@ export default function MainFooter() {
     <RootStyle>
       <Divider />
 
-      <Container sx={{ pt: 10 }}>
-        <Grid
-          container
-          justifyContent={{ xs: 'center', md: 'space-between' }}
-          sx={{ textAlign: { xs: 'center', md: 'left' } }}
-        >
-          <Grid item xs={12} sx={{ mb: 3 }}>
-            <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
-          </Grid>
-
-          <Grid item xs={8} md={3}>
-            <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Công cụ giới thiệu địa điểm, và gợi ý lịch trình cho người muốn tìm hiểu sâu
-              hơn về Hà Nội
-            </Typography>
-
-            <Stack
-              direction="row"
-              justifyContent={{ xs: 'center', md: 'flex-start' }}
-              sx={{ mt: 5, mb: { xs: 5, md: 0 } }}
-            ></Stack>
-          </Grid>
-
-          <Grid item xs={12} md={7}>
-            <Stack
-              spacing={5}
-              direction={{ xs: 'column', md: 'row' }}
-              justifyContent="space-between"
+      <Grid container sx={{ width: '100%', marginTop: 4 }}>
+        <Grid item xs={6}>
+          <Stack direction="column" sx={{ marginLeft: 9 }}>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: '16px',
+                marginBottom: '5px'
+              }}
             >
-              {LINKS.map((list) => (
-                <Stack key={list.headline} spacing={2}>
-                  <Typography component="p" variant="overline">
-                    {list.headline}
-                  </Typography>
-
-                  {list.children.map((link) => (
-                    <Link
-                      to={link.href}
-                      key={link.name}
-                      color="inherit"
-                      variant="body2"
-                      component={RouterLink}
-                      sx={{ display: 'block' }}
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </Stack>
-              ))}
-            </Stack>
-          </Grid>
+              Công cụ giới thiệu địa điểm & hướng dẫn đường đi
+            </Typography>
+            <Typography>
+              {' '}
+              {
+                <Iconify
+                  icon="fluent:location-12-filled"
+                  sx={{ marginRight: 1, paddingTop: '3px', color: '#009792' }}
+                />
+              }
+              Địa chỉ: Nam Từ Liêm, Hà Nội
+            </Typography>
+            <Typography>
+              {' '}
+              {
+                <Iconify
+                  icon="carbon:phone-filled"
+                  sx={{ marginRight: 1, paddingTop: '3px', color: '#009792' }}
+                />
+              }
+              Điện thoại: 0981787551
+            </Typography>
+            <Typography>
+              {' '}
+              {
+                <Iconify
+                  icon="tabler:mail-filled"
+                  sx={{ marginRight: 1, paddingTop: '3px', color: '#009792' }}
+                />
+              }
+              Email: phandung3499@gmail.com
+            </Typography>
+          </Stack>
         </Grid>
-
-        <Typography
-          component="p"
-          variant="body2"
+        <Grid
+          item
+          xs={6}
           sx={{
-            mt: 10,
-            pb: 5,
-            fontSize: 13,
-            textAlign: { xs: 'center', md: 'left' }
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+            paddingRight: 9
           }}
         >
-          © 2023. All rights reserved
-        </Typography>
-      </Container>
+          <Typography
+            sx={{
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              fontSize: '16px',
+              marginBottom: '5px'
+            }}
+          >
+            Kết nối với chúng tôi
+            <br />
+          </Typography>
+
+          <Stack direction="row" spacing={3}>
+            <Iconify icon="fa:facebook-square" />
+            <Iconify icon="uil:instagram" />
+            <Iconify icon="icon-park-solid:youtube" />
+            <Iconify icon="iconoir:tiktok" />
+          </Stack>
+        </Grid>
+      </Grid>
     </RootStyle>
   );
 }

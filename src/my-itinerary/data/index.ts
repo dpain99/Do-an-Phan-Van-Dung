@@ -14,70 +14,70 @@ const districts: IDataDistrict[] = [
   {
     src: 'BaDinh-src',
     layer: 'BaDinh-layer',
-    color: 'red',
+    color: '#E84543',
     id: 1,
     value: BaDinhDistrict
   },
   {
     src: 'HoanKiem-src',
     layer: 'HoanKiem-layer',
-    color: 'blue',
+    color: '#37A9A0',
     id: 2,
     value: HoanKiemDistrict
   },
   {
     src: 'TayHo-src',
     layer: 'TayHo-layer',
-    color: 'yellow',
+    color: '#793F68',
     id: 3,
     value: TayHoDistrict
   },
   {
     src: 'CauGiay-src',
     layer: 'CauGiay-layer',
-    color: 'green',
+    color: '#FFFF00',
     id: 4,
     value: CauGiayDistrict
   },
   {
     src: 'DongDa-src',
     layer: 'DongDa-layer',
-    color: 'purple',
+    color: ' #FFA500',
     id: 5,
     value: DongDaDistrict
   },
   {
     src: 'HaiBaTrung-src',
     layer: 'HaiBaTrung-layer',
-    color: 'pink',
+    color: '#800080',
     id: 6,
     value: HaiBaTrungDistrict
   },
   {
     src: 'ThanhXuan-src',
     layer: 'ThanhXuan-layer',
-    color: 'gray',
+    color: '#FFC0CB',
     id: 7,
     value: ThanhXuanDistrict
   },
   {
     src: 'BacTuLiem-src',
     layer: 'BacTuLiem-layer',
-    color: 'blue',
+    color: '#00FFFF',
     id: 8,
     value: BacTuLiemDistrict
   },
   {
     src: 'NamTuLiem-src',
     layer: 'NamTuLiem-layer',
-    color: 'blue',
+    color: '#808080',
     id: 9,
     value: NamTuLiemDistrict
   },
   {
     src: 'HoangMai-src',
     layer: 'HoangMai-layer',
-    color: 'blue',
+    color: '#34A853',
     id: 10,
     value: HoangMaiDistrict
   }

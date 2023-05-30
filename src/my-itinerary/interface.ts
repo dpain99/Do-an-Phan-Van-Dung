@@ -2,6 +2,7 @@ export interface MyFeatureProperties {
   name: string;
   id?: number;
   src?: string;
+  center?: [number, number];
 }
 
 export interface MyFeature extends GeoJSON.Feature {
@@ -26,11 +27,13 @@ export interface IStateSlice {
   itemValue: any;
   clickShowMarker: { coordinate: number[]; name: string }[];
   oneMarker: { coordinate: number[]; name: string };
+  deleteOneMarker: { coordinate: number[]; name: string };
   route: any;
   currentPoint: number[];
   showDirectionBox: boolean;
   directionVehicle: string;
   deleteDirection: string;
+  styleMap: string;
 }
 
 export interface IDataDistrict {

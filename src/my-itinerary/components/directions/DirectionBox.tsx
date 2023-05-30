@@ -1,5 +1,5 @@
 import { Divider, IconButton, Paper, Stack, TextField, Tooltip } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch } from 'src/common/redux/store';
@@ -8,8 +8,10 @@ import {
   currentPoint,
   directionVehicle,
   oneMarker,
+  searchResult,
   setRoute,
-  setSearchText
+  setSearchText,
+  showDirectionBox
 } from 'src/my-itinerary/slice';
 import SearchBox from '../search/SearchBox';
 import DetailDirection from './DetailDirection';
@@ -17,18 +19,33 @@ import Vehicle from './Vehicle';
 
 export default function DirectionBox() {
   const [startPoint, setStartPoint] = useState<number[]>([]);
+  const [endPoint, setEndPoint] = useState<number[]>([]);
   const dataDestination = useSelector(oneMarker);
   const profileDirection = useSelector(directionVehicle);
+  const locationResultSearch = useSelector(searchResult);
+  const showDirection = useSelector(showDirectionBox);
 
   const current = useSelector(currentPoint);
 
-  const endPoint = dataDestination.coordinate;
+  useEffect(() => {
+    setEndPoint(dataDestination.coordinate);
+  }, [dataDestination]);
+
+  useEffect(() => {
+    setStartPoint(locationResultSearch);
+  }, [locationResultSearch]);
+
   const handleClickCurrent = () => {
     setStartPoint(current);
     dispatch(setSearchText('Vị trí hiện tại'));
   };
 
-  const handleClickRoute = () => {
+  console.log('startPoint', startPoint);
+
+  useEffect(() => {
+    if (showDirection === false) {
+      return;
+    }
     useGetDirection(profileDirection, startPoint, endPoint)
       .then((routeData) => {
         dispatch(setRoute(routeData));
@@ -36,7 +53,7 @@ export default function DirectionBox() {
       .catch((error) => {
         console.error('Error:', error);
       });
-  };
+  }, [profileDirection, startPoint, endPoint]);
 
   return (
     <>
@@ -47,8 +64,6 @@ export default function DirectionBox() {
           width: '450px',
           height: '100%',
           backgroundColor: 'white'
-          // overflowY: 'auto',
-          // whiteSpace: 'nowrap',
         }}
       >
         <Paper
@@ -101,7 +116,7 @@ export default function DirectionBox() {
                   value={dataDestination.name}
                   disabled
                 />
-                <Tooltip title="Bắt đầu tìm đường">
+                {/* <Tooltip title="Bắt đầu tìm đường">
                   <IconButton sx={{ marginLeft: 1 }} onClick={handleClickRoute}>
                     <Iconify
                       icon="material-symbols:not-started-outline-rounded"
@@ -112,13 +127,18 @@ export default function DirectionBox() {
                       }}
                     />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
               </Stack>
             </Stack>
           </Stack>
         </Paper>
 
-        <Stack>
+        <Stack
+          sx={{
+            overflowY: 'auto',
+            whiteSpace: 'nowrap'
+          }}
+        >
           <DetailDirection />
         </Stack>
       </Stack>

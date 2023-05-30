@@ -23,11 +23,9 @@ export default function ShowListSelected() {
         Danh sách bạn đã chọn
       </Typography>
       {listLocation?.map((item, index) => (
-        <>
-          <Typography>
-            {index + 1}. {convertNumber(item)?.label}
-          </Typography>
-        </>
+        <Typography key={index}>
+          {index + 1}. {convertNumber(item)?.label}
+        </Typography>
       ))}
     </Stack>
   );

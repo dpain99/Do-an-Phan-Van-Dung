@@ -60,6 +60,9 @@ export const PATH_DASHBOARD = {
   },
   night_travels: {
     root: path(ROOTS_DASHBOARD, '/night-travels')
+  },
+  feature_blog: {
+    root: path(ROOTS_DASHBOARD, '/feature-blog')
   }
 };
 

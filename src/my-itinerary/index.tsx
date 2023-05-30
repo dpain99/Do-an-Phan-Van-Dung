@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch } from 'src/common/redux/store';
 import MenuDistrict from './components/MenuDistrict';
+import ChangeStyle from './components/change-style/ChangeStyle';
 import ListLocationDistrict from './components/detailLocation/ListLocationDistrict';
 import DirectionBox from './components/directions/DirectionBox';
 import SearchBox from './components/search/SearchBox';
@@ -15,10 +16,12 @@ import { MyFeature } from './interface';
 import {
   currentPoint,
   deleteDirection,
+  deleteOneMarker,
   districtValue,
   oneMarker,
   route,
   searchResult,
+  searchText,
   selectedDistrict,
   setClickShowMarker,
   setCurrentPoint,
@@ -28,22 +31,24 @@ import {
   setSelectedDistrict,
   setShowDirectionBox,
   setValueDistrict,
-  showDirectionBox
+  showDirectionBox,
+  styleMap
 } from './slice';
-import { map } from 'lodash';
 
 export default function index() {
   const [map, setMap] = useState<Map | null>(null);
-  // const [current, setCurrent] = useState<number[]>([0, 0]);
   const [hasDistrict, setHasDistrict] = useState<number[]>([]);
   const current = useSelector(currentPoint);
   const idDistrict = useSelector(districtValue);
   const idSelected = useSelector(selectedDistrict);
   const locationResultSearch = useSelector(searchResult);
   const showOneMarker = useSelector(oneMarker);
+  const delOneMarker = useSelector(deleteOneMarker);
   const dataRoute = useSelector(route);
   const showDirection = useSelector(showDirectionBox);
   const delDirection = useSelector(deleteDirection);
+  const mapStyle = useSelector(styleMap);
+  const textSearch = useSelector(searchText);
 
   const [showStack, setShowStack] = useState(false);
   const [showLocationDistrict, setShowLocationDistrict] = useState(false);
@@ -60,6 +65,7 @@ export default function index() {
     dispatch(setShowDirectionBox(!showDirection));
   };
 
+  // an/hien danh sach dia diem
   useEffect(() => {
     if (idSelected.length === 0) {
       setShowLocationDistrict(false);
@@ -84,6 +90,7 @@ export default function index() {
     }
   }, []);
 
+  // hien thi map
   useEffect(() => {
     mapboxgl.accessToken =
       'pk.eyJ1IjoiZHBhaW45OSIsImEiOiJjbGc5NWkzNTIxNDcxM3JxaTNwa3ZlYzlyIn0.dwjFzgl7WQKbd6rRab5IBg';
@@ -99,24 +106,12 @@ export default function index() {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [current[0], current[1]],
-        zoom: 12
+        zoom: 11,
+        attributionControl: false
       });
 
       map.on('load', () => {
         setMap(map);
-        districts.map((item) => {
-          map.addSource(item.src, {
-            type: 'geojson',
-            data: item.value
-          });
-        });
-
-        locationsOnDistricts.map((item) => {
-          map.addSource(item.src, {
-            type: 'geojson',
-            data: item.value
-          });
-        });
       });
     };
 
@@ -126,7 +121,31 @@ export default function index() {
     }
   }, [current]);
 
+  // thay doi style cua map
   useEffect(() => {
+    map?.setStyle(mapStyle);
+  }, [mapStyle]);
+
+  // hien thi layer cho tung quan
+  useEffect(() => {
+    districts.forEach((item) => {
+      if (map?.getSource(item.src) === undefined) {
+        map?.addSource(item.src, {
+          type: 'geojson',
+          data: item.value
+        });
+      }
+    });
+
+    locationsOnDistricts.map((item) => {
+      if (map?.getSource(item.src) === undefined) {
+        map?.addSource(item.src, {
+          type: 'geojson',
+          data: item.value
+        });
+      }
+    });
+
     const pickedDistrict = districts.filter((value) => {
       return idSelected.includes(value.id);
     });
@@ -137,7 +156,7 @@ export default function index() {
     pickedDistrict.map((data) => {
       if (hasDistrict.includes(data.id)) {
         console.log('da ton tai');
-      } else
+      } else {
         map?.addLayer({
           id: data.layer,
           type: 'line',
@@ -148,6 +167,9 @@ export default function index() {
             // 'fill-opacity': 0.4
           }
         });
+        const centerZoom = data.value.features[0].properties.center;
+        map?.flyTo({ center: centerZoom, zoom: 12 });
+      }
     });
 
     const unPickedDistrict = districts.filter((value) => {
@@ -156,11 +178,9 @@ export default function index() {
     const idUnPickedDistrict = unPickedDistrict.map((item) => item.id);
 
     unPickedDistrict.map((data) => {
-      if (idUnPickedDistrict.includes(data.id)) {
-        // remove district
+      const layer = map?.getLayer(data.layer);
+      if (layer) {
         map?.removeLayer(data.layer);
-      } else {
-        console.log('nothing');
       }
     });
   }, [idDistrict]);
@@ -172,53 +192,49 @@ export default function index() {
       if (markerRef.current) {
         markerRef.current.remove();
       }
+      if (map?.getSource('search-text')) {
+        map.removeLayer('search-text');
+        map.removeSource('search-text');
+      }
       if (locationResultSearch.length >= 2) {
         const marker = new mapboxgl.Marker()
           .setLngLat([locationResultSearch[0], locationResultSearch[1]])
           .addTo(map);
-        map.setCenter([locationResultSearch[0], locationResultSearch[1]]);
-        map.setZoom(13);
+        map.flyTo({
+          center: [locationResultSearch[0], locationResultSearch[1]],
+          zoom: 13
+        });
+
         markerRef.current = marker;
+
+        map.addLayer({
+          id: 'search-text',
+          type: 'symbol',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [locationResultSearch[0], locationResultSearch[1]]
+              },
+              properties: {
+                name: `${textSearch}`
+              }
+            }
+          },
+          layout: {
+            'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
+            'text-size': 12,
+            'text-offset': [0, 2]
+          },
+          paint: {
+            'text-color': 'black'
+          }
+        });
       }
     }
   }, [locationResultSearch, map]);
-
-  // useEffect(() => {
-  //   if (map !== null) {
-  //     if (showOneMarker.coordinate.length > 1) {
-  //       const marker = new mapboxgl.Marker()
-  //         .setLngLat([showOneMarker.coordinate[0], showOneMarker.coordinate[1]])
-  //         .addTo(map);
-
-  //       const handleClickRemove = (popup: mapboxgl.Popup) => {
-  //         marker.remove();
-  //         popup.remove();
-  //       };
-
-  //       const markerLabel = document.createElement('div');
-  //       markerLabel.className = 'marker-label';
-  //       markerLabel.textContent = showOneMarker.name;
-
-  //       const markerElement = marker.getElement();
-  //       markerElement.appendChild(markerLabel);
-
-  //       marker.getElement().addEventListener('click', () => {
-  //         const popup = new mapboxgl.Popup({ closeOnClick: false })
-  //           .setLngLat([showOneMarker.coordinate[0], showOneMarker.coordinate[1]])
-  //           .setHTML(
-  //             `
-  //             <div>
-  //               <button id="button1">Xóa Marker</button>
-  //             </div>
-  //           `
-  //           )
-  //           .addTo(map);
-  //         const button1 = document.getElementById('button1');
-  //         button1?.addEventListener('click', () => handleClickRemove(popup));
-  //       });
-  //     }
-  //   }
-  // }, [showOneMarker, map]);
 
   // show tat ca Marker
   // useEffect(() => {
@@ -259,51 +275,11 @@ export default function index() {
   //   }
   // }, [showMarkerLocation, map]);
 
+  // hien thi layer direction
   useEffect(() => {
     if (dataRoute !== undefined) {
       if (map !== null) {
         if (dataRoute) {
-          // const currentPoint: MyFeature = {
-          //   type: 'Feature',
-          //   geometry: {
-          //     type: 'Point',
-          //     coordinates: [current[0], current[1]]
-          //   },
-          //   properties: {
-          //     name: 'Bạn đang ở đây'
-          //   }
-          // };
-
-          // map.addLayer({
-          //   id: 'current-point',
-          //   type: 'circle',
-          //   source: {
-          //     type: 'geojson',
-          //     data: currentPoint
-          //   },
-          //   paint: {
-          //     'circle-color': 'red',
-          //     'circle-radius': 10
-          //   }
-          // });
-
-          // map.addLayer({
-          //   id: 'current-text',
-          //   type: 'symbol',
-          //   source: {
-          //     type: 'geojson',
-          //     data: currentPoint
-          //   },
-          //   layout: {
-          //     'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
-          //     'text-size': 12,
-          //     'text-offset': [0, 2]
-          //   },
-          //   paint: {
-          //     'text-color': 'red'
-          //   }
-          // });
-
           // map.on('click', 'current-point', function (e) {
           //   if (map.getSource('current-point')) {
           //     map.removeLayer('current-point');
@@ -376,8 +352,10 @@ export default function index() {
               }
             },
             paint: {
-              'circle-color': 'red',
-              'circle-radius': 10
+              'circle-color': '#FFD166',
+              'circle-radius': 10,
+              'circle-stroke-color': '#EF476F',
+              'circle-stroke-width': 2
             }
           });
 
@@ -396,51 +374,20 @@ export default function index() {
                   ]
                 },
                 properties: {
-                  name: 'Bạn đang ở đây'
+                  name: 'Điểm bắt đầu'
                 }
               }
             },
             layout: {
-              'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
+              // 'text-field': ['format', ['get', 'name'], { 'font-scale': 1 }],
               'text-size': 12,
               'text-offset': [0, 2]
             },
             paint: {
-              'text-color': 'red'
+              'text-color': 'black'
             }
           });
         }
-
-        // them marker Current
-        // const markerCurrent = new mapboxgl.Marker()
-        //   .setLngLat([current[0], current[1]])
-        //   .addTo(map);
-        // const handleClickRemove = (popup: mapboxgl.Popup) => {
-        //   markerCurrent.remove();
-        //   popup.remove();
-        // };
-
-        // const markerLabel = document.createElement('div');
-        // markerLabel.className = 'marker-label';
-        // markerLabel.textContent = 'Bạn đang ở đây';
-
-        // const markerElement = markerCurrent.getElement();
-        // markerElement.appendChild(markerLabel);
-
-        // markerCurrent.getElement().addEventListener('click', () => {
-        //   const popup = new mapboxgl.Popup({ closeOnClick: false })
-        //     .setLngLat([current[0], current[1]])
-        //     .setHTML(
-        //       `
-        //       <div>
-        //         <button id="button1">Xóa Marker</button>
-        //       </div>
-        //     `
-        //     )
-        //     .addTo(map);
-        //   const button1 = document.getElementById('button1');
-        //   button1?.addEventListener('click', () => handleClickRemove(popup));
-        // });
 
         const handleDeleteLayerAndSource = () => {
           if (map?.getLayer('route')) {
@@ -448,6 +395,19 @@ export default function index() {
           }
           if (map?.getSource('route')) {
             map.removeSource('route');
+          }
+
+          if (map.getSource(`${showOneMarker.name}-background`)) {
+            map.removeLayer(`${showOneMarker.name}-background`);
+            map.removeSource(`${showOneMarker.name}-background`);
+          }
+          if (map.getSource(`${showOneMarker.name}-point`)) {
+            map.removeLayer(`${showOneMarker.name}-point`);
+            map.removeSource(`${showOneMarker.name}-point`);
+          }
+          if (map.getSource(`${showOneMarker.name}-text`)) {
+            map.removeLayer(`${showOneMarker.name}-text`);
+            map.removeSource(`${showOneMarker.name}-text`);
           }
 
           // markerCurrent.remove();
@@ -458,8 +418,9 @@ export default function index() {
         deleteButton?.addEventListener('click', handleDeleteLayerAndSource);
       }
     }
-  }, [dataRoute, showOneMarker]);
+  }, [dataRoute]);
 
+  // hien thi layer khi click tung diem
   useEffect(() => {
     if (map !== null) {
       if (showOneMarker.coordinate.length > 1) {
@@ -475,6 +436,36 @@ export default function index() {
           }
         };
 
+        // map.addLayer({
+        //   id: `${showOneMarker.name}-point`,
+        //   type: 'circle',
+        //   source: {
+        //     type: 'geojson',
+        //     data: point
+        //   },
+        //   paint: {
+        //     'circle-color': 'black',
+        //     'circle-radius': 9,
+        //     'circle-stroke-color': 'white',
+        //     'circle-stroke-width': 2
+        //   }
+        // });
+
+        map.addLayer({
+          id: `${showOneMarker.name}-background`,
+          type: 'circle',
+          source: {
+            type: 'geojson',
+            data: point
+          },
+          paint: {
+            'circle-color': 'white',
+            'circle-radius': 10,
+            'circle-stroke-color': 'black',
+            'circle-stroke-width': 1
+          }
+        });
+
         map.addLayer({
           id: `${showOneMarker.name}-point`,
           type: 'circle',
@@ -483,8 +474,8 @@ export default function index() {
             data: point
           },
           paint: {
-            'circle-color': 'red',
-            'circle-radius': 10
+            'circle-color': 'black',
+            'circle-radius': 8
           }
         });
 
@@ -501,18 +492,9 @@ export default function index() {
             'text-offset': [0, 2]
           },
           paint: {
-            'text-color': 'red'
-          }
-        });
-
-        map.on('click', `${showOneMarker.name}-point`, function (e) {
-          if (map.getSource(`${showOneMarker.name}-point`)) {
-            map.removeLayer(`${showOneMarker.name}-point`);
-            map.removeSource(`${showOneMarker.name}-point`);
-          }
-          if (map.getSource(`${showOneMarker.name}-text`)) {
-            map.removeLayer(`${showOneMarker.name}-text`);
-            map.removeSource(`${showOneMarker.name}-text`);
+            'text-color': 'black',
+            'text-halo-color': 'white',
+            'text-halo-width': 0.5
           }
         });
 
@@ -521,6 +503,22 @@ export default function index() {
     }
   }, [showOneMarker]);
 
+  // delete marker location
+  useEffect(() => {
+    if (map?.getSource(`${delOneMarker.name}-background`)) {
+      map?.removeLayer(`${delOneMarker.name}-background`);
+      map?.removeSource(`${delOneMarker.name}-background`);
+    }
+    if (map?.getSource(`${delOneMarker.name}-point`)) {
+      map?.removeLayer(`${delOneMarker.name}-point`);
+      map?.removeSource(`${delOneMarker.name}-point`);
+    }
+    if (map?.getSource(`${delOneMarker.name}-text`)) {
+      map?.removeLayer(`${delOneMarker.name}-text`);
+      map?.removeSource(`${delOneMarker.name}-text`);
+    }
+  }, [delOneMarker]);
+
   // giai phong bo nho khi unmount component
   useEffect(() => {
     return () => {
@@ -528,9 +526,8 @@ export default function index() {
       dispatch(setSelectedDistrict([]));
       dispatch(setSearchResult([]));
       dispatch(setClickShowMarker([]));
-      dispatch(setCurrentPoint([]));
+      // dispatch(setCurrentPoint([]));
       dispatch(setOneMarker({ coordinate: [], name: '' }));
-      dispatch(setRoute({}));
       dispatch(setRoute({}));
       dispatch(setShowDirectionBox(false));
     };
@@ -633,6 +630,18 @@ export default function index() {
             />
           )}
         </Button>
+
+        <Stack
+          sx={{
+            position: 'absolute',
+            bottom: '5px',
+            left: '380px',
+            zIndex: 1000,
+            width: '70px'
+          }}
+        >
+          <ChangeStyle />
+        </Stack>
 
         <Button
           onClick={handleDetailLocation}

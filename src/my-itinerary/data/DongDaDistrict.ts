@@ -6,7 +6,8 @@ export const DongDaDistrict: MyFeatureCollection = {
     {
       type: 'Feature',
       properties: {
-        name: 'Trường Đại học'
+        name: 'Trường Đại học',
+        center: [105.82773246793721, 21.01751050289715]
       },
       geometry: {
         type: 'Polygon',

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Iconify from 'src/common/components/Iconify';
 import { dispatch } from 'src/common/redux/store';
-import { location, setRoute } from '../slice';
+import { location, setLocation, setRoute } from '../slice';
 import DetailDirection from './DetailDirection';
 import './MapboxDirections.css';
 import ShowListSelected from './ShowListSelected';
@@ -117,7 +117,6 @@ export default function MapDirections() {
         border: 1px solid black;
         color: white;
         `;
-
         const coordinateMaker = new mapboxgl.Marker({
           element: markerEl
         })
@@ -154,6 +153,13 @@ export default function MapDirections() {
       initializeMap({ setMap, mapContainer: { current: mapContainer } });
     }
   }, [current]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLocation([]));
+      dispatch(setRoute({}));
+    };
+  }, []);
 
   return (
     <Box

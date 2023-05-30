@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -9,11 +10,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import * as React from 'react';
-import { convertNumber } from '../utils/convertNumber';
+import useMessage from 'src/common/hooks/useMessage';
 import { dispatch } from 'src/common/redux/store';
-import { convertCoordinate } from '../utils/convertCoordinate';
 import { setLocation, setTab } from '../slice';
-import { LoadingButton, TabContext } from '@mui/lab';
+import { convertNumber } from '../utils/convertNumber';
 
 function not(a: readonly number[], b: readonly number[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -32,12 +32,19 @@ export default function TransferList() {
   const [left, setLeft] = React.useState<readonly number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   const [right, setRight] = React.useState<number[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
-  console.log('right', right);
 
+  const { showSuccessSnackbar, showErrorSnackbar } = useMessage();
   const handleCreate = () => {
-    dispatch(setLocation(right));
-    setLoading(true);
-    dispatch(setTab(2));
+    if (right.length === 1) {
+      showErrorSnackbar('Danh sách đã chọn phải có ít nhất 2 địa điểm');
+    } else if (right.length === 0) {
+      showErrorSnackbar('Bạn chưa chọn địa điểm nào');
+    } else {
+      dispatch(setLocation(right));
+      setLoading(true);
+      dispatch(setTab(2));
+      showSuccessSnackbar('Khởi tạo hành trình thành công');
+    }
   };
 
   const leftChecked = intersection(checked, left);
@@ -199,7 +206,7 @@ export default function TransferList() {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          marginTop: 3
+          marginTop: 2
         }}
       >
         <LoadingButton loading={loading} variant="contained" onClick={handleCreate}>
